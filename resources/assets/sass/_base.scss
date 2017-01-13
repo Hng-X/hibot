@@ -1,0 +1,17 @@
+$body_bg: #181842;
+$text_clr: #d3e0f7;
+$border_clr: #5e5e5f;
+
+*{
+	color: $text_clr;
+	font-family: 'Lato', sans-serif;
+}
+body{
+	/*background-color: $body_bg;*/
+	margin: 0px;
+}
+
+/* Display Flex */
+header,.header__wrapper,footer,.cta,.screenshot-list{ display: flex;}
+
+.cta-btn > span,.cta-caption > h1,.cta-caption > h2{font-weight: 300;}

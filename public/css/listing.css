@@ -1,0 +1,73 @@
+body {
+  background-image: linear-gradient(to top right, #307ea2, #31708f, #00c7ff) !important;
+  min-height: 655px; }
+
+.header-container, .links-row, item-info {
+  display: flex; }
+
+header {
+  justify-content: center;
+    background-color: #c72e45;
+  padding: 40px 0; }
+
+.header-container {
+  justify-content: space-between;
+  align-items: center; }
+  .header-container .team-name {
+    font-size: 35px;
+    color: blueviolet;
+    width: 70%;
+    line-height: 40px; }
+  .header-container .search-box input[type="search"] {
+    padding: 10px 48px 10px 12px;
+    background-color: gainsboro;
+      width: 50%;
+    border: 1px solid rgba(204, 204, 204, 0.85); }
+    .header-container .search-box input[type="search"]:active, .header-container .search-box input[type="search"]:focus {
+      background-color: #ffffff;
+      box-shadow: 1px 1px 15px 3px #808080;
+      outline: none;
+      border-radius: 4px; }
+
+.welcome-note {
+  margin-top: 30px; }
+  .welcome-note h4 {
+    margin-top: 0; }
+
+.links-row {
+  justify-content: space-around;
+  padding: 30px; }
+  .links-row .links-row__item {
+    width: 24%;
+    float: left;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    margin-right: 1%;
+    border-radius: 2px; }
+    .links-row .links-row__item:hover {
+      cursor: pointer;
+      box-shadow: 4px 5px 16px 3px #696A84; }
+    .links-row .links-row__item:last-child {
+      margin-right: 0; }
+    .links-row .links-row__item .item-source p span:first-child {
+      margin-right: 5px; }
+    .links-row .links-row__item .item-details .item-title a {
+      font-size: 15px;
+      font-weight: 700;
+      font-variant: small-caps; }
+    .links-row .links-row__item .item-details .item-title .item-highlight__attached span {
+      font-size: 15px; }
+    .links-row .links-row__item .item-details .item-highlight__details {
+      background-color: rgba(238, 238, 238, 0.92);
+      padding: 5px 7px;
+      border-left: 1px solid #a6a6ef; }
+    .links-row .links-row__item .item-info {
+      display: flex;
+      margin-top: 15px;
+      justify-content: space-between; }
+      .links-row .links-row__item .item-info .item-info__name p {
+        font-family: monospace; }
+        .links-row .links-row__item .item-info .item-info__name p span {
+          font-weight: 700; }
+
+/*# sourceMappingURL=listing.css.map */

@@ -1,0 +1,159 @@
+@import 'base';
+
+header{
+	/*border-bottom: 1px solid $border_clr;*/
+	background-color: #c72e45;
+	justify-content: center;
+}
+.header__wrapper{ justify-content: space-between; width: 90%; }
+.logo{ 
+	padding: 15px 0;
+  background: url("https://linxer.herokuapp.com/assets/linxer.png") no-repeat;
+	background-size:contain;
+}
+.logo__text{margin: 0;}
+.signin a{ padding:15px 0; margin-left: 10px;}
+.signin a,.signin p{ display: inline-block; }
+
+.signin-btn{ 
+	border-radius: 10px;
+	border: 1px solid;
+	padding: 11px 25px;
+	background-color: transparent;
+	cursor: pointer;
+}
+.cta-btn:hover,.signin-btn:hover{background-color: #c72e45 *.9;}
+.cta-btn:hover span,.signin-btn:hover  span{color: $text_clr *.9;}
+.signin-btn > span{font-size: 16px;}
+.cta-btn{
+	padding: 15px;
+    border-radius: 10px;
+    border-style: none;
+    background: #c72e45;
+    cursor: pointer;
+}
+.cta-btn > span{font-size: 28px; }
+.cta-caption > h1 {font-size: 32px;}
+
+
+.cta{
+	background-color: $body_bg;
+	height: 500px;
+	padding: 20px;
+	align-items: center;
+	justify-content: space-around;
+
+	.cta-intro{
+		width: 50%;
+		padding:0px 50px;
+	}
+
+	.cta-img{
+		width: 50%;
+		height: inherit;
+		//background-color: #bbb;
+	}
+}
+
+footer{
+	border-top: 1px solid $border_clr;
+	justify-content: center;
+}
+.screenshot-list{
+	width: 100%;
+	justify-content: space-around;
+}
+
+.screenshot-list__item{
+	width: 30%;
+	height: 350px;
+	background-color: #fff;
+}
+
+
+//Media query for mobile devices
+@media(max-width: 500px){
+	.header__wrapper{
+		display: block;
+		text-align: center;
+		.logo{
+			h1{
+				font-size: 24px;
+			}
+		}
+
+		.signin{
+
+		}
+	}
+
+	.cta{
+		display: block;
+		height: 400px;
+
+		.cta-intro{
+			width: 100%;
+			padding: 0px;
+
+			h1{
+				font-size: 24px;
+			}
+
+			h2{
+				font-size: 18px;
+			}
+
+			span{
+				font-size: 20px;
+			}
+		}
+
+		.cta-img{
+
+		}
+	}
+
+}
+
+@media(max-width: 700px) and (min-width: 500px){
+	.header__wrapper{
+		display: block;
+		text-align: center;
+		.logo{
+			h1{
+				font-size: 32px;
+			}
+		}
+
+		.signin{
+
+		}
+	}
+
+	.cta{
+		display: block;
+		height: 400px;
+
+		.cta-intro{
+			width: 100%;
+			padding: 0px;
+
+			h1{
+				font-size: 32px;
+			}
+
+			h2{
+				font-size: 22px;
+			}
+
+			span{
+				font-size: 24px;
+			}
+		}
+
+		.cta-img{
+
+		}
+	}
+
+}

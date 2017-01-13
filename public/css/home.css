@@ -1,0 +1,208 @@
+/* line 5, ../../resources/assets/sass/_base.scss */
+* {
+  color: #d3e0f7;
+  font-family: 'Lato', sans-serif;
+}
+
+/* line 9, ../../resources/assets/sass/_base.scss */
+body {
+  /*background-color: $body_bg;*/
+  margin: 0px;
+}
+
+/* Display Flex */
+/* line 15, ../../resources/assets/sass/_base.scss */
+header, .header__wrapper, footer, .cta, .screenshot-list {
+  display: flex;
+}
+
+/* line 17, ../../resources/assets/sass/_base.scss */
+.cta-btn > span, .cta-caption > h1, .cta-caption > h2 {
+  font-weight: 300;
+}
+
+/* line 3, ../../resources/assets/sass/home.scss */
+header {
+  /*border-bottom: 1px solid $border_clr;*/
+  background-color: #c72e45;
+  justify-content: center;
+}
+
+/* line 8, ../../resources/assets/sass/home.scss */
+.header__wrapper {
+  justify-content: space-between;
+  width: 90%;
+}
+
+/* line 9, ../../resources/assets/sass/home.scss */
+.logo {
+  padding: 15px 0;
+  background: url("{{ env('APP_URL') }}/assets/linxer.png") no-repeat;
+  background-size: contain;
+}
+
+/* line 14, ../../resources/assets/sass/home.scss */
+.logo__text {
+  margin: 0;
+}
+
+/* line 15, ../../resources/assets/sass/home.scss */
+.signin a {
+  padding: 15px 0;
+  margin-left: 10px;
+}
+
+/* line 16, ../../resources/assets/sass/home.scss */
+.signin a, .signin p {
+  display: inline-block;
+}
+
+/* line 18, ../../resources/assets/sass/home.scss */
+.signin-btn {
+  border-radius: 10px;
+  border: 1px solid;
+  padding: 11px 25px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* line 25, ../../resources/assets/sass/home.scss */
+.cta-btn:hover, .signin-btn:hover {
+  background-color: #b3293e;
+}
+
+/* line 26, ../../resources/assets/sass/home.scss */
+.cta-btn:hover span, .signin-btn:hover span {
+  color: #becade;
+}
+
+/* line 27, ../../resources/assets/sass/home.scss */
+.signin-btn > span {
+  font-size: 16px;
+}
+
+/* line 28, ../../resources/assets/sass/home.scss */
+.cta-btn {
+  padding: 15px;
+  border-radius: 10px;
+  border-style: none;
+  background: #c72e45;
+  cursor: pointer;
+}
+
+/* line 35, ../../resources/assets/sass/home.scss */
+.cta-btn > span {
+  font-size: 28px;
+}
+
+/* line 36, ../../resources/assets/sass/home.scss */
+.cta-caption > h1 {
+  font-size: 32px;
+}
+
+/* line 39, ../../resources/assets/sass/home.scss */
+.cta {
+  background-color: #181842;
+  height: 500px;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-around;
+}
+/* line 46, ../../resources/assets/sass/home.scss */
+.cta .cta-intro {
+  width: 50%;
+  padding: 0px 50px;
+}
+/* line 51, ../../resources/assets/sass/home.scss */
+.cta .cta-img {
+  width: 50%;
+  height: inherit;
+}
+
+/* line 58, ../../resources/assets/sass/home.scss */
+footer {
+  border-top: 1px solid #5e5e5f;
+  justify-content: center;
+}
+
+/* line 62, ../../resources/assets/sass/home.scss */
+.screenshot-list {
+  width: 100%;
+  justify-content: space-around;
+}
+
+/* line 67, ../../resources/assets/sass/home.scss */
+.screenshot-list__item {
+  width: 30%;
+  height: 350px;
+  background-color: #fff;
+}
+
+@media (max-width: 500px) {
+  /* line 76, ../../resources/assets/sass/home.scss */
+  .header__wrapper {
+    display: block;
+    text-align: center;
+  }
+  /* line 80, ../../resources/assets/sass/home.scss */
+  .header__wrapper .logo h1 {
+    font-size: 24px;
+  }
+
+  /* line 90, ../../resources/assets/sass/home.scss */
+  .cta {
+    display: block;
+    height: 400px;
+  }
+  /* line 94, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro {
+    width: 100%;
+    padding: 0px;
+  }
+  /* line 98, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro h1 {
+    font-size: 24px;
+  }
+  /* line 102, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro h2 {
+    font-size: 18px;
+  }
+  /* line 106, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro span {
+    font-size: 20px;
+  }
+}
+@media (max-width: 700px) and (min-width: 500px) {
+  /* line 119, ../../resources/assets/sass/home.scss */
+  .header__wrapper {
+    display: block;
+    text-align: center;
+  }
+  /* line 123, ../../resources/assets/sass/home.scss */
+  .header__wrapper .logo h1 {
+    font-size: 32px;
+  }
+
+  /* line 133, ../../resources/assets/sass/home.scss */
+  .cta {
+    display: block;
+    height: 400px;
+  }
+  /* line 137, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro {
+    width: 100%;
+    padding: 0px;
+  }
+  /* line 141, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro h1 {
+    font-size: 32px;
+  }
+  /* line 145, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro h2 {
+    font-size: 22px;
+  }
+  /* line 149, ../../resources/assets/sass/home.scss */
+  .cta .cta-intro span {
+    font-size: 24px;
+  }
+}
