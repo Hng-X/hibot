@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/verify', 'BotController@verify');
+
 Route::get('/links/{teamSlug}', 'WebController@viewLinks');
 
 //---- bot events route
