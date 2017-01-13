@@ -2,7 +2,7 @@
 
 header{
 	/*border-bottom: 1px solid $border_clr;*/
-	background-color: #c72e45;
+	background-color: #1E0741;
 	justify-content: center;
 }
 .header__wrapper{ justify-content: space-between; width: 90%; }
@@ -22,14 +22,14 @@ header{
 	background-color: transparent;
 	cursor: pointer;
 }
-.cta-btn:hover,.signin-btn:hover{background-color: #c72e45 *.9;}
+.cta-btn:hover,.signin-btn:hover{background-color: #1E0741 *.9;}
 .cta-btn:hover span,.signin-btn:hover  span{color: $text_clr *.9;}
 .signin-btn > span{font-size: 16px;}
 .cta-btn{
 	padding: 15px;
     border-radius: 10px;
     border-style: none;
-    background: #c72e45;
+    background: #1E0741;
     cursor: pointer;
 }
 .cta-btn > span{font-size: 28px; }
