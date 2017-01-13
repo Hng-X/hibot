@@ -48,7 +48,7 @@ class AuthController extends Controller
         $response = $client->request('GET', 'https://slack.com/api/oauth.access',
             array(
                 'query' => [
-                    'client_id' => env('SLACK_CLIENT_ID'),,
+                    'client_id' => env('SLACK_CLIENT_ID'),
                     'client_secret' => env('SLACK_CLIENT_SECRET'),
                     'redirect_uri' => 'http://linxer.herokuapp.com/Auth/signin',
                     'code' => $code
