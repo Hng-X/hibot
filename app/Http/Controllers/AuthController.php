@@ -13,9 +13,13 @@ class AuthController extends Controller
         $code = $_GET['code'];
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/oauth.access',
-            ['query' => ['client_id' => '104593454705.107498116711',
-                'client_secret' => env('SLACK_CLIENT_SECRET'),
-                'code' => $code]]);
+            array(
+                'query' => [
+                    'client_id' => env('SLACK_CLIENT_ID'),
+                    'client_secret' => env('SLACK_CLIENT_SECRET'),
+                    'code' => $code
+                ]
+            ));
         $response = json_decode($response->getBody(), true);
         if ($response['ok'] === true) {
             if (isset($response['access_token'])) {
@@ -33,7 +37,7 @@ class AuthController extends Controller
         return view('Auth/add', ['result' => $result]);
     }
 
-    /* Redirects user to teams links Page
+    /** Redirects user to teams links Page
     *
     *
     */
@@ -42,10 +46,15 @@ class AuthController extends Controller
         $code = $_GET['code'];
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/oauth.access',
-            ['query' => ['client_id' => '104593454705.107498116711',
-                'client_secret' => env('SLACK_CLIENT_SECRET'),
-                'redirect_uri' => 'http://linxer.herokuapp.com/Auth/signin',
-                'code' => $code]]);
+            array(
+                'query' => [
+                    'client_id' => env('SLACK_CLIENT_ID'),,
+                    'client_secret' => env('SLACK_CLIENT_SECRET'),
+                    'redirect_uri' => 'http://linxer.herokuapp.com/Auth/signin',
+                    'code' => $code
+                ]
+            )
+        );
         $response = json_decode($response->getBody(), true);
         $team_id = $response['team']['id'];
         $access_token = $response['access_token'];
