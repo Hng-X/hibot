@@ -30,7 +30,7 @@
 					<h1>Make newcomers to your team feel at home and up-to-date, instantly.</h2>
 				</div>
 				<div class="cta-link">
-					<a href="https://slack.com/oauth/authorize?scope=incoming-webhook,bot&client_id={{ env("SLACK_CLIENT_ID") }}>
+					<a href="https://slack.com/oauth/authorize?scope=incoming-webhook,bot&client_id={{ env("SLACK_CLIENT_ID") }}&redirect_uri=http://hibotapp.herokuapp.com/auth/add">
 						<button class="cta-btn"><span>Add hibot to your Slack</span></button>
 					</a>
 				</div>
