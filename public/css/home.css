@@ -24,7 +24,7 @@ header, .header__wrapper, footer, .cta, .screenshot-list {
 /* line 3, ../../resources/assets/sass/home.scss */
 header {
   /*border-bottom: 1px solid $border_clr;*/
-  background-color: #c72e45;
+  background-color: #1E0741;
   justify-content: center;
 }
 
@@ -86,7 +86,7 @@ header {
   padding: 15px;
   border-radius: 10px;
   border-style: none;
-  background: #c72e45;
+  background: #1E0741 ;
   cursor: pointer;
 }
 
