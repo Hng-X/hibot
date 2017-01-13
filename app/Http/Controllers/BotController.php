@@ -62,4 +62,13 @@ class BotController extends Controller
         return json_decode($response->getBody(), true);
     }
 
+    public function verify(Request $request)
+    {
+        if ($request->input("type") == "url_verification") {
+            return response($request->input("challenge"), 200);
+        }
+        
+        //return $next($request);
+    }
+
 }
