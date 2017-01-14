@@ -52,7 +52,6 @@ class HandleSlackEvent implements ShouldQueue
                         );
 
                         $response = $this->respond($data);
-                        Log::info("Dispatched: ".print_r($response, true));
                     }
                 }
             }
@@ -74,7 +73,6 @@ class HandleSlackEvent implements ShouldQueue
                 //respond
 
                 $response = $this->respond($data);
-                Log::info("Response for DM: ".print_r($response, true));
             }
         }
       
@@ -136,7 +134,6 @@ class HandleSlackEvent implements ShouldQueue
         foreach ($users as $user) {
             if($user["username"] == $username) {
                 $userId=$user["id"];
-                Log::info("Obtained user: ".print_r($user, true));
                 break;
             }
         }
@@ -149,7 +146,6 @@ class HandleSlackEvent implements ShouldQueue
             if($project["web_url"] == "https://gitlab.com/hng-interns/$projectName"
             || $project["web_url"] == "http://gitlab.com/hng-interns/$projectName" ) {
                 $projId=$project["id"];
-                Log::info("Obtained project: ".print_r($project, true));
                 break;
             }
         }
