@@ -36,7 +36,7 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         if ($this->request['event']['type'] == "message") {
-            Log::info("Parsed: ".print_r($this>request->all(), true));
+            Log::info("Parsed: ".print_r($this->request->all(), true));
 
             if (isset($this->request['event']['user'])) {
                 $userId = $this->request['event']['user'];
