@@ -3,14 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Credential;
-use App\Models\Link;
-use App\Models\LinkTag;
+use Gitlab\Api\Projects;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class HandleSlackEvent implements ShouldQueue
 {
@@ -36,15 +34,24 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         if ($this->request['event']['type'] == "message") {
-            $rawText=$this->request['event']['text'];
-            $parsedText=$this->parseText($rawText);
-            if($parsedText) {
-                $matchea=[];
-                preg_match("/[\w+]/i", $parsedText['username'], $matches);
-               $result=$this->addToGitlab($matches[0]);
-              if ($result) {}
+            $rawText = $this->request['event']['text'];
+            $parsedText = $this->parseText($rawText);
+            if (isset($parsedText["type"])) {
+                if ($parsedText["type"] == "gitlab-add") {
+                    $result = $this->addToGitlab($parsedText["username"]);
+                    if ($result) {
+                        $user=$this->request['event']['user'];
+                        $data = array(
+                            "team_id" => $this->request['team_id'],
+                            "channel" => $this->request['event']['channel'],
+                            "text" => "Added to Gitlab! <@$user>"
+                        );
+
+                        $response = $this->respond($data);
+                    }
+                }
+            }
         }
-}
         /*if ($this->request['event']['type'] == "message") {
             $userId = $this->request['event']['user'];
             if ($this->request['event']['subtype'] == "channel_join") {
@@ -71,29 +78,25 @@ class HandleSlackEvent implements ShouldQueue
 
     public function parseText($text)
     {
-        $tokens = explode(' ', $text);
-        $botUserId=Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if (in_array("<@$botUserId>", $tokens)) {
-            if (!empty(preg_grep("/add/i", $tokens)) || (!empty(preg_grep("/gitlab/i", $tokens))) || (!empty(preg_grep("/username/i", $tokens)))) {
+        $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
+        if (preg_match("/<@$botUserId>/", $text)) {
+            $matches = [];
+            if (preg_match("/@-(\w+)/i", $text, $matches)) {
                 return array(
-                    'type' => 'add-gitlab',
-                    'username' => preg_grep("/@-[\w+]/i", $tokens)[0]
-            }/* else if ($tokens[1] == "find" || $tokens[1] == "search") {
-                return array(
-                    'type' => 'search',
-                    'query_terms' => array_slice($tokens, 2));
-            }*/
-          }
-return null;
+                    'type' => 'gitlab-add',
+                    'username' => $matches[1]
+                );
+            }
         }
-return null;
+        return [];
     }
 
 
     /**
      * Posts responses to Slack
      */
-    public function respond(array $data)
+    public
+    function respond(array $data)
     {
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/chat.postMessage',
@@ -107,14 +110,32 @@ return null;
         return json_decode($response->getBody(), true);
     }
 
-public function addToGitlab ($username) {
-    $client = new \Gitlab\Client('http://git.yourdomain.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here 
+    public function addToGitlab($username)
+    {
+        //authenticate
+        $client = new \Gitlab\Client('http://gitlab.com.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
+        $client->authenticate(env('GITLAB_TOKEN'), \Gitlab\Client::AUTH_URL_TOKEN);
 
-//get user's Gitlab user id
+        //get user's Gitlab user id
 
-//add user to project
-$project = new \Gitlab\Model\Project(1, $client);
-$user=project->addMember($userId, $accessLevel);
-}
+        //get project
+        $api = new Projects($client);
+        $projects = $api->accessible();
+        $projId;
+        foreach ($projects as $project) {
+            if($project["weburl"] == "https://gitlab.com/hng-interns/getting-started"
+            || $project["weburl"] == "http://gitlab.com/hng-interns/getting-started" ) {
+                $projId=$project["id"];
+            }
+        }
+        if(!$projId) {
+            throw new \ErrorException("couldnt get project");
+        }
+
+        //add user to project
+        $project = new \Gitlab\Model\Project($projId, $client);
+        $user = $project->addMember($userId, 30);
+        return $user;
+    }
 
 }
