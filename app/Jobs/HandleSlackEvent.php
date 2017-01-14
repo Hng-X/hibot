@@ -43,7 +43,7 @@ class HandleSlackEvent implements ShouldQueue
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
                     $result = $this->addToGitlab($parsedText["username"]);
-                    if ($result) {
+                    if (!isset($result["message"])) {
                         $user=$this->request['event']['user'];
                         $data = array(
                             "team_id" => $this->request['team_id'],
