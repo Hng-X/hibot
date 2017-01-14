@@ -176,7 +176,7 @@ class HandleSlackEvent implements ShouldQueue
             'access_level' => 30
        );
 
-        curl_setopt($ch, CURLOPT_URL, "http://gitlab.com/api/v3/projects/$projId/members?user_id=$userid&acces_level=30");
+        curl_setopt($ch, CURLOPT_URL, "http://gitlab.com/api/v3/projects/$projId/members?user_id=$userId&acces_level=30");
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HEADER, false);
