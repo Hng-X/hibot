@@ -40,9 +40,9 @@ class HandleSlackEvent implements ShouldQueue
             if ($this->request['event']['subtype'] == "channel_join") {
 
                 $options = array(
-                    "Hey there, @<$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_right: https://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
-                    "Hi, @<$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nOops...Forgive my manners...my name's hibot, but my friends call me...hibot :stuck_out_tongue_winking_eye: I hope we'll be friends :blush:",
-                    "Welcome to the Hotels.ng remote internship Slack team, @<$userId>!\nCheck out :point_right: https://sites.google.com/hotels.ng/internship/home to know how to get started.\nOh, and my name's hibot, but then...I'm just a bot :disappointed:"
+                    "Hey there, <@$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_right: https://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
+                    "Hi, <@$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nThe name's hibot. Peace!",
+                    "Welcome to the Hotels.ng remote internship Slack team, <@$userId>!\nCheck out :point_right: https://sites.google.com/hotels.ng/internship/home for how to get started.\nMy name's hibot. Pleased to meet you. :wave:"
                 );
                 $data = array(
                     "team_id" => $this->request['team_id'],
