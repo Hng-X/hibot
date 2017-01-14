@@ -116,7 +116,7 @@ class HandleSlackEvent implements ShouldQueue
     {
         //authenticate
         $client = new \Gitlab\Client('http://gitlab.com.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
-        $client->authenticate(env('GITLAB_TOKEN'), \Gitlab\Client::AUTH_URL_TOKEN);
+        $client->authenticate(env('GITLAB_TOKEN'), \Gitlab\Client::AUTH_HTTP_TOKEN);
 
         //get user's Gitlab user id
         $api=new Users($client);
