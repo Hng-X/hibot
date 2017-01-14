@@ -169,7 +169,7 @@ class HandleSlackEvent implements ShouldQueue
        $postfields = array(
            'user_id' => $userId,
             'access_level' => 30,
-           "private_token" => env("GITLAB_TOKEN")
+           "private_token" => env('GITLAB_TOKEN')
        );
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -178,6 +178,7 @@ class HandleSlackEvent implements ShouldQueue
         $resp=curl_exec($ch);
 
         $resp= json_decode($resp, true);
+        Log::info("token: ".env("GITLAB_TOKEN"));
         Log::info("Resp add: ".print_r($resp, true));
         return $resp;
     }
