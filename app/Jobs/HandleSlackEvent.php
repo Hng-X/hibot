@@ -37,7 +37,7 @@ class HandleSlackEvent implements ShouldQueue
     {
         if ($this->request['event']['type'] == "message") {
             
-            $userId = $this->request['event']['user']["id"];
+            $userId = $this->request['event']['user'];
 
             $options = array(
                 "Hey there, @<$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_right: https://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
