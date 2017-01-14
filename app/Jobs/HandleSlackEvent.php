@@ -55,9 +55,16 @@ class HandleSlackEvent implements ShouldQueue
                                 "channel" => $this->request['event']['channel'],
                                 "text" => "Added to Gitlab! <@$user>"
                             );
-
-                            $response = $this->respond($data);
+                        } else {
+                            $user = $this->request['event']['user'];
+                            $data = array(
+                                "team_id" => $this->request['team_id'],
+                                "channel" => $this->request['event']['channel'],
+                                "text" => "Sorry, I couldn't add you, <@$user>. Please ensure you're signed up on gitlab.com, and that you posted your corret gitlab username (including capitalisation, if neccessary), then try again."
+                            );
                         }
+                        $response = $this->respond($data);
+
                     }
                 }
             } else if ($this->request['event']['subtype'] == "channel_join") {
