@@ -156,6 +156,7 @@ Log::info("User: $userId, project: $projId");
         Log::info("Result of add: " . print_r($resp, true));
         return $resp;
     }
+}
 
 class Project extends Projects {
       protected function addMember($projId, $userId, $access) {
@@ -168,5 +169,5 @@ class Project extends Projects {
 ));
 
 }
-}
+
 }
