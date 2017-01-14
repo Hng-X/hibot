@@ -84,9 +84,9 @@ class HandleSlackEvent implements ShouldQueue
     public function parseText($text)
     {
         $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if (preg_match("/<@$botUserId>/", $text)) {
+        if (preg_match("/<@$botUserId>/i", $text)) {
             $matches = [];
-            if (preg_match("/username\s*\s*(\w+)/i", $text, $matches)) {
+            if (preg_match("/username\s*:\s*(\w+)/i", $text, $matches)) {
                 $parsed = array(
                     'type' => 'gitlab-add',
                     'username' => $matches[1]
