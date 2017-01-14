@@ -151,9 +151,31 @@ class HandleSlackEvent implements ShouldQueue
         }
 
         //add user to project
-Log::info("User: $userId, project: $projId");
-        $resp = $api->addMember($projId, $userId, 30);
+        Log::info("User: $userId, project: $projId");
+
+        /*$resp = $api->addMember($projId, $userId, 30);
         Log::info("Result of add: " . print_r($resp, true));
+        */
+
+        $ch = curl_init();
+        $cookieFile = "cookie.txt";
+
+        curl_setopt($ch, CURLOPT_URL, "http://gitlab.com/api/v3/projects/$projId/members");
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+       $postfields = array(
+           'user_id' => $userId,
+            'access_level' => 30,
+           "private_token" => env("GITLAB_TOKEN")
+       );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postfields));
+        $resp=curl_exec($ch);
         return $resp;
     }
 }
