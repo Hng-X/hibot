@@ -121,7 +121,7 @@ class HandleSlackEvent implements ShouldQueue
 
         //get user's Gitlab user id
         $api=new Users($client);
-        $users=$user->search($username);
+        $users=$api->search($username);
         $userId = "";
         foreach ($users as $user) {
             if($user["username"] == $username) {
