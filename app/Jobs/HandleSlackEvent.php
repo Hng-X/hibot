@@ -152,7 +152,7 @@ class HandleSlackEvent implements ShouldQueue
 
         //add user to project
 Log::info("User: $userId, project: $projId");
-        $resp = $api->addMember($projId, $userId, 30);
+        $resp = $api->addMember($projId, "$userId", 30);
         Log::info("Result of add: " . print_r($resp, true));
         return $resp;
     }
