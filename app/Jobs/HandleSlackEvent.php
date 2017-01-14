@@ -36,31 +36,30 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         if ($this->request['event']['type'] == "message") {
-if(isset($this->request['event']['user'])) {
-$userId=$this->request['event']['user'];
-} else return;
+            if (isset($this->request['event']['user'])) {
+                $userId = $this->request['event']['user'];
+            } else return;
             if (!isset($this->request['event']['subtype'])) {
-            $rawText = $this->request['event']['text'];
-            $parsedText = $this->parseText($rawText);
-            if (isset($parsedText["type"])) {
-                if ($parsedText["type"] == "gitlab-add") {
-                    $result = $this->addToGitlab($parsedText["username"], $parsedText["project"]);
-                    if (!isset($result["message"])) {
-                        $user=$this->request['event']['user'];
-                        $data = array(
-                            "team_id" => $this->request['team_id'],
-                            "channel" => $this->request['event']['channel'],
-                            "text" => "Added to Gitlab! <@$user>"
-                        );
+                $rawText = $this->request['event']['text'];
+                $parsedText = $this->parseText($rawText);
+                if (isset($parsedText["type"])) {
+                    if ($parsedText["type"] == "gitlab-add") {
+                        $result = $this->addToGitlab($parsedText["username"], $parsedText["project"]);
+                        if (!isset($result["message"])) {
+                            $user = $this->request['event']['user'];
+                            $data = array(
+                                "team_id" => $this->request['team_id'],
+                                "channel" => $this->request['event']['channel'],
+                                "text" => "Added to Gitlab! <@$user>"
+                            );
 
-                        $response = $this->respond($data);
+                            $response = $this->respond($data);
+                        }
                     }
                 }
-            }
-        }
-            else if ($this->request['event']['subtype'] == "channel_join") {
-            $userName=preg_match("/@\w+\|(\w+)/i", $this->request['event']['text'], $matches);
-            $userName = $userName[1];
+            } else if ($this->request['event']['subtype'] == "channel_join") {
+                $userName = preg_match("/@\w+\|(\w+)/i", $this->request['event']['text'], $matches);
+                $userName = $matches[1];
                 $options = array(
                     "Hey there, <@$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_down:\nhttps://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
                     "Hi, <@$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nThe name's hibot. Peace!",
@@ -77,7 +76,7 @@ $userId=$this->request['event']['user'];
                 $response = $this->respond($data);
             }
         }
-      
+
     }
 
 
@@ -87,15 +86,14 @@ $userId=$this->request['event']['user'];
         if (preg_match("/<@$botUserId>/", $text)) {
             $matches = [];
             if (preg_match("/username\s*\s*(\w+)/i", $text, $matches)) {
-                 $parsed=array(
+                $parsed = array(
                     'type' => 'gitlab-add',
                     'username' => $matches[1]
                 );
                 if (preg_match("/project\s*:\s*(\w+-?\w+)/i", $text, $matches)) {
                     $parsed["project"] = strtolower($matches[1]);
-                }
-                else $parsed["project"] = "getting-started";
-                Log::info("Parsed: ".print_r($parsed, true));
+                } else $parsed["project"] = "getting-started";
+                Log::info("Parsed: " . print_r($parsed, true));
                 return $parsed;
             }
         }
@@ -121,20 +119,20 @@ $userId=$this->request['event']['user'];
         return json_decode($response->getBody(), true);
     }
 
-    public function addToGitlab($username, $projectName="getting-started")
+    public function addToGitlab($username, $projectName = "getting-started")
     {
         //authenticate
         $client = new \Gitlab\Client('http://gitlab.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
         $client->authenticate(env('GITLAB_TOKEN'), \Gitlab\Client::AUTH_HTTP_TOKEN);
 
         //get user's Gitlab user id
-        $api=new Users($client);
-        $users=$api->search($username);
-        
+        $api = new Users($client);
+        $users = $api->search($username);
+
         $userId = "";
         foreach ($users as $user) {
-            if($user["username"] == $username) {
-                $userId=$user["id"];
+            if ($user["username"] == $username) {
+                $userId = $user["id"];
                 break;
             }
         }
@@ -144,13 +142,14 @@ $userId=$this->request['event']['user'];
         $projects = $api->accessible();
         $projId = "";
         foreach ($projects as $project) {
-            if($project["web_url"] == "https://gitlab.com/hng-interns/$projectName"
-            || $project["web_url"] == "http://gitlab.com/hng-interns/$projectName" ) {
-                $projId=$project["id"];
+            if ($project["web_url"] == "https://gitlab.com/hng-interns/$projectName"
+                || $project["web_url"] == "http://gitlab.com/hng-interns/$projectName"
+            ) {
+                $projId = $project["id"];
                 break;
             }
         }
-        if(!$projId) {
+        if (!$projId) {
             throw new \ErrorException("couldnt get project");
         }
 
@@ -168,10 +167,10 @@ $userId=$this->request['event']['user'];
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-       $postfields = array(
-           'user_id' => $userId,
+        $postfields = array(
+            'user_id' => $userId,
             'access_level' => 30
-       );
+        );
 
         curl_setopt($ch, CURLOPT_URL, "https://gitlab.com/api/v3/projects/$projId/members");
 
@@ -179,12 +178,12 @@ $userId=$this->request['event']['user'];
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postfields));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "PRIVATE-TOKEN: ".env('GITLAB_TOKEN')
+            "PRIVATE-TOKEN: " . env('GITLAB_TOKEN')
         ));
-        $resp=curl_exec($ch);
-        Log::info("Request add: ".http_build_query($postfields));
-        $resp= json_decode($resp, true);
-        Log::info("Resp add: ".print_r($resp, true));
+        $resp = curl_exec($ch);
+        Log::info("Request add: " . http_build_query($postfields));
+        $resp = json_decode($resp, true);
+        Log::info("Resp add: " . print_r($resp, true));
         return $resp;
     }
 }
