@@ -26,7 +26,6 @@ class BotController extends Controller
     public function receive(Request $request)
     {
         $data = $request->all();
-        Log::info("Received request: " . print_r($data, true));
         dispatch(new HandleSlackEvent($data));
         return response('Ok', 200);
     }
