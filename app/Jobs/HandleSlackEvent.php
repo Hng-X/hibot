@@ -66,7 +66,7 @@ class HandleSlackEvent implements ShouldQueue
                 );
                 $data = array(
                     "team_id" => $this->request['team_id'],
-                    "channel" => "@<$userId>",
+                    "channel" => "$userId",
                     "text" => $options[array_rand($options)]
                 );
 
