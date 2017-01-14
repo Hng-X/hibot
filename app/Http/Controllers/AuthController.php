@@ -51,6 +51,7 @@ class AuthController extends Controller
             ));
         $response = json_decode($response->getBody(), true);
         if ($response['ok'] === true) {
+            Log::info("Joined: ".print_r($response, true));
             return "Joined $name";
         }
         else {
