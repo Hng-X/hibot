@@ -92,7 +92,7 @@ class HandleSlackEvent implements ShouldQueue
                     'username' => $matches[1]
                 );
                 if (preg_match("/project:\s+(\w+-?\w+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[1])
+                    $parsed["project"] = strtolower($matches[1]);
                 }
                 else $parsed["project"] = "getting-started";
                 Log::info("Parsed: ".print_r($parsed, true));
