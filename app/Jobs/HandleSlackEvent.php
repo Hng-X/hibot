@@ -42,7 +42,7 @@ class HandleSlackEvent implements ShouldQueue
             $parsedText = $this->parseText($rawText);
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
-                    $result = $this->addToGitlab($parsedText["username"]);
+                    $result = $this->addToGitlab($parsedText["username"], $parsedText["project"]);
                     if (!isset($result["message"])) {
                         $user=$this->request['event']['user'];
                         $data = array(
@@ -52,6 +52,7 @@ class HandleSlackEvent implements ShouldQueue
                         );
 
                         $response = $this->respond($data);
+                        Log::info("Dispatched: ".print_r($response, true));
                     }
                 }
             }
@@ -85,11 +86,17 @@ class HandleSlackEvent implements ShouldQueue
         $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
         if (preg_match("/<@$botUserId>/", $text)) {
             $matches = [];
-            if (preg_match("/@-(\w+)/i", $text, $matches)) {
-                return array(
+            if (preg_match("/username:\s(\w+)/i", $text, $matches)) {
+                 $parsed=array(
                     'type' => 'gitlab-add',
                     'username' => $matches[1]
                 );
+                if (preg_match("/project:\s(\w+-?\w+)/i", $text, $matches)) {
+                    $parsed["project"] = $matches[1];
+                }
+                else $parsed["project"] = "getting-started";
+                Log::info("Parsed: ".print_r($parsed, true));
+                return $parsed;
             }
         }
         return [];
@@ -114,7 +121,7 @@ class HandleSlackEvent implements ShouldQueue
         return json_decode($response->getBody(), true);
     }
 
-    public function addToGitlab($username)
+    public function addToGitlab($username, $project="getting-started")
     {
         //authenticate
         $client = new \Gitlab\Client('http://gitlab.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
@@ -139,8 +146,8 @@ class HandleSlackEvent implements ShouldQueue
         $projects = $api->accessible();
         $projId = "";
         foreach ($projects as $project) {
-            if($project["web_url"] == "https://gitlab.com/hng-interns/getting-started"
-            || $project["web_url"] == "http://gitlab.com/hng-interns/getting-started" ) {
+            if($project["web_url"] == "https://gitlab.com/hng-interns/$project"
+            || $project["web_url"] == "http://gitlab.com/hng-interns/$project" ) {
                 $projId=$project["id"];
                 Log::info("Obtained project: ".print_r($project, true));
                 break;
@@ -151,7 +158,6 @@ class HandleSlackEvent implements ShouldQueue
         }
 
         //add user to project
-        Log::info("User: $userId, project: $projId");
 
         /*$resp = $api->addMember($projId, $userId, 30);
         Log::info("Result of add: " . print_r($resp, true));
@@ -180,7 +186,6 @@ class HandleSlackEvent implements ShouldQueue
         $resp=curl_exec($ch);
 
         $resp= json_decode($resp, true);
-        Log::info("token: ".env("GITLAB_TOKEN"));
         Log::info("Resp add: ".print_r($resp, true));
         return $resp;
     }
