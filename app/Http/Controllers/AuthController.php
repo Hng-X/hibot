@@ -32,7 +32,7 @@ class AuthController extends Controller
                 $credential->save();
             }
             //join the channel so you can receive events from there
-            $joined = $this->joinChannel($response['bot']['bot_access_token']);
+            $joined = $this->joinChannel($response['access_token']);
             $result = "Authorized\n".$joined;
         } else {
             $result = $response['error'];
