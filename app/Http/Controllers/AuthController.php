@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Credential;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -51,6 +52,7 @@ class AuthController extends Controller
             return "Joined $name";
         }
         else {
+            Log::info("Couldnt join: ".print_r($response, true));
             return "Couldnt join";
         }
     }
