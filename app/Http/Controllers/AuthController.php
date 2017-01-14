@@ -40,7 +40,7 @@ class AuthController extends Controller
         return view('Auth/add', ['result' => $result]);
     }
 
-    public function joinChannel($token, $name="general") {
+    public function joinChannel($token, $name="random") {
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/channels.join',
             array(
