@@ -139,10 +139,10 @@ class HandleSlackEvent implements ShouldQueue
         $projects = $api->accessible();
         $projId = "";
         foreach ($projects as $project) {
-            if($project["weburl"] == "https://gitlab.com/hng-interns/getting-started"
-            || $project["weburl"] == "http://gitlab.com/hng-interns/getting-started" ) {
+            if($project["web_url"] == "https://gitlab.com/hng-interns/getting-started"
+            || $project["web_url"] == "http://gitlab.com/hng-interns/getting-started" ) {
                 $projId=$project["id"];
-                Log::info("Obtained user: ".print_r($project, true));
+                Log::info("Obtained project: ".print_r($project, true));
                 break;
             }
         }
