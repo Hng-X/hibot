@@ -103,10 +103,10 @@ class HandleSlackEvent implements ShouldQueue
             if (preg_match("/username\s*(:)|(is)\s*(\w+)/i", $text, $matches)) {
                 $parsed = array(
                     'type' => 'gitlab-add',
-                    'username' => $matches[2]
+                    'username' => $matches[1]
                 );
                 if (preg_match("/project\s*(:)|(is)\s*(\w+-?\w+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[2]);
+                    $parsed["project"] = strtolower($matches[1]);
                 } else $parsed["project"] = "getting-started";
                 Log::info("Parsed: " . print_r($parsed, true));
                 return $parsed;
