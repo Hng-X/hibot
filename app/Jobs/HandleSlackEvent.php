@@ -135,7 +135,7 @@ class HandleSlackEvent implements ShouldQueue
         }
 
         //get project
-        $api = new Project($client);
+        $api = new Projects($client);
         $projects = $api->accessible();
         $projId = "";
         foreach ($projects as $project) {
@@ -156,18 +156,4 @@ Log::info("User: $userId, project: $projId");
         Log::info("Result of add: " . print_r($resp, true));
         return $resp;
     }
-}
-
-class Project extends Projects {
-      protected function addMember($projId, $userId, $access) {
-        
-        return $this->post("/projects/$projId/members', array(
-'user_id' => $userId,
-
-'access_level' => $access
-
-));
-
-}
-
 }
