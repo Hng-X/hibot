@@ -110,15 +110,16 @@ class HandleSlackEvent implements ShouldQueue
                 } else $parsed["project"] = "getting-started";
                 Log::info("Parsed: " . print_r($parsed, true));
                 return $parsed;
-            } else if(preg_match("/(\b404\b)/i", $text)
-                || (stripos($text, "gitlab")!==false
-                    && stripos($text, "error")!==false
-                    && stripos($text, "access"))) {
-                $parsed = array(
-                    'type' => 'gitlab-problem-access'
-                );
-                return $parsed;
             }
+        }
+        if(preg_match("/(\b404\b)/i", $text)
+            || (stripos($text, "gitlab")!==false
+                && stripos($text, "error")!==false
+                && stripos($text, "access"))) {
+            $parsed = array(
+                'type' => 'gitlab-problem-access'
+            );
+            return $parsed;
         }
         return [];
     }
