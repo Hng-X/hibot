@@ -176,6 +176,8 @@ class HandleSlackEvent implements ShouldQueue
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postfields));
         $resp=curl_exec($ch);
+
+        $resp= json_decode($resp, true);
         return $resp;
     }
 }
