@@ -48,7 +48,7 @@ class HandleSlackEvent implements ShouldQueue
                 if (isset($parsedText["type"])) {
                     if ($parsedText["type"] == "gitlab-add") {
                         $result = $this->addToGitlab($parsedText["username"], $parsedText["project"]);
-                        if (!isset($result["message"])) {
+                        if ($result |= null && !isset($result["message"])) {
                             $user = $this->request['event']['user'];
                             $data = array(
                                 "team_id" => $this->request['team_id'],
@@ -173,7 +173,7 @@ class HandleSlackEvent implements ShouldQueue
             }
         }
         if (!$projId) {
-            throw new \ErrorException("couldnt get project");
+            return null;
         }
 
         //add user to project
