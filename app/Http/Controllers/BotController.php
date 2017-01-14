@@ -67,7 +67,7 @@ class BotController extends Controller
         if ($request->input("type") == "url_verification") {
             return response($request->input("challenge"), 200);
         }
-        
+
         //return $next($request);
     }
 

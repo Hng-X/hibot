@@ -33,14 +33,15 @@ class AuthController extends Controller
             }
             //join the channel so you can receive events from there
             $joined = $this->joinChannel($response['access_token']);
-            $result = "Authorized\n".$joined;
+            $result = "Authorized\n" . $joined;
         } else {
             $result = $response['error'];
         }
         return view('Auth/add', ['result' => $result]);
     }
 
-    public function joinChannel($token, $name="random") {
+    public function joinChannel($token, $name = "random")
+    {
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/channels.join',
             array(
@@ -51,19 +52,18 @@ class AuthController extends Controller
             ));
         $response = json_decode($response->getBody(), true);
         if ($response['ok'] === true) {
-            Log::info("Joined: ".print_r($response, true));
+            Log::info("Joined: " . print_r($response, true));
             return "Joined $name";
-        }
-        else {
-            Log::info("Couldnt join: ".print_r($response, true));
+        } else {
+            Log::info("Couldnt join: " . print_r($response, true));
             return "Couldnt join";
         }
     }
 
     /** Redirects user to teams links Page
-    *
-    *
-    */
+     *
+     *
+     */
     public function redirectUsertoTeamLinks()
     {
         $code = $_GET['code'];

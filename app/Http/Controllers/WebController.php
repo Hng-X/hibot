@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+
 use App\Models\Link;
+
 /**
  * Handles requests through the browser ie at the live site
  */
@@ -23,7 +24,7 @@ class WebController extends Controller
      */
     public function getAllLinks($team)
     {
-    
+
     }
 
     /** Searches for a team's links matching a given search query
