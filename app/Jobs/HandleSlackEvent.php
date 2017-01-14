@@ -35,7 +35,7 @@ class HandleSlackEvent implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->request['event']['type'] == "message") {
+        /*if ($this->request['event']['type'] == "message") {
             $userId = $this->request['event']['user'];
             if ($this->request['event']['subtype'] == "channel_join") {
 
@@ -54,7 +54,7 @@ class HandleSlackEvent implements ShouldQueue
 
                 $response = $this->respond($data);
             }
-        }
+        }*/
             /*if ($this->request['event']['type'] == "team_join") {
                 $firstName= isset($this->request['event']['user']["profile"]["first_name"]) ? $this->request['event']['user']["profile"]["first_name"] : "@<$userId>";
 
