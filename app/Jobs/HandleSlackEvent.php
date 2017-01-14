@@ -121,7 +121,7 @@ class HandleSlackEvent implements ShouldQueue
         return json_decode($response->getBody(), true);
     }
 
-    public function addToGitlab($username, $project="getting-started")
+    public function addToGitlab($username, $projectName="getting-started")
     {
         //authenticate
         $client = new \Gitlab\Client('http://gitlab.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
@@ -146,8 +146,8 @@ class HandleSlackEvent implements ShouldQueue
         $projects = $api->accessible();
         $projId = "";
         foreach ($projects as $project) {
-            if($project["web_url"] == "https://gitlab.com/hng-interns/$project"
-            || $project["web_url"] == "http://gitlab.com/hng-interns/$project" ) {
+            if($project["web_url"] == "https://gitlab.com/hng-interns/$projectName"
+            || $project["web_url"] == "http://gitlab.com/hng-interns/$projectName" ) {
                 $projId=$project["id"];
                 Log::info("Obtained project: ".print_r($project, true));
                 break;
