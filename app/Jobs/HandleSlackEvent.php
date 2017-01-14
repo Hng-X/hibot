@@ -92,7 +92,7 @@ class HandleSlackEvent implements ShouldQueue
                     'username' => $matches[1]
                 );
                 if (preg_match("/project:\s+(\w+-?\w+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[1]);
+                    $parsed["project"] = strtolower($matches[1]);t
                 }
                 else $parsed["project"] = "getting-started";
                 Log::info("Parsed: ".print_r($parsed, true));
@@ -166,7 +166,6 @@ class HandleSlackEvent implements ShouldQueue
         $ch = curl_init();
         $cookieFile = "cookie.txt";
 
-        curl_setopt($ch, CURLOPT_URL, "http://gitlab.com/api/v3/projects/$projId/members");
         curl_setopt($ch, CURLOPT_COOKIESESSION, true);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
@@ -176,10 +175,12 @@ class HandleSlackEvent implements ShouldQueue
            'user_id' => $userId,
             'access_level' => 30
        );
+
+        curl_setopt($ch, CURLOPT_URL, "http://gitlab.com/api/v3/projects/$projId/members?user_id=$userid&acces_level=30");
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postfields));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "PRIVATE-TOKEN: ".env('GITLAB_TOKEN')
         ));
