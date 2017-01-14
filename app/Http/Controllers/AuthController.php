@@ -30,11 +30,29 @@ class AuthController extends Controller
                 $credential->bot_access_token = $response['bot']['bot_access_token'];
                 $credential->save();
             }
-            $result = "Authorized";
+            //join the channel so you can receive events from there
+            $joined = $this->joinChannel($response['bot']['bot_access_token']);
+            $result = "Authorized\n".$joined;
         } else {
             $result = $response['error'];
         }
         return view('Auth/add', ['result' => $result]);
+    }
+
+    public function joinChannel($token, $name="general") {
+        $client = new Client();
+        $response = $client->request('GET', 'https://slack.com/api/channels.join',
+            array(
+                'token' => $token,
+                'name' => $name
+                ));
+        $response = json_decode($response->getBody(), true);
+        if ($response['ok'] === true) {
+            return "Joined $name";
+        }
+        else {
+            return "Couldnt join";
+        }
     }
 
     /** Redirects user to teams links Page
