@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class HandleSlackEvent implements ShouldQueue
 {
@@ -38,6 +39,7 @@ class HandleSlackEvent implements ShouldQueue
             $parsedText = $this->parseText($rawText);
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
+                    Log::info("Parsed: " . print_r($parsedText, true));
                     $result = $this->addToGitlab($parsedText["username"]);
                     if ($result) {
                         $user=$this->request['event']['user'];
@@ -121,7 +123,7 @@ class HandleSlackEvent implements ShouldQueue
         //get project
         $api = new Projects($client);
         $projects = $api->accessible();
-        $projId;
+        $projId = "";
         foreach ($projects as $project) {
             if($project["weburl"] == "https://gitlab.com/hng-interns/getting-started"
             || $project["weburl"] == "http://gitlab.com/hng-interns/getting-started" ) {
@@ -135,6 +137,7 @@ class HandleSlackEvent implements ShouldQueue
         //add user to project
         $project = new \Gitlab\Model\Project($projId, $client);
         $user = $project->addMember($userId, 30);
+        Log::info("Result of add: " . print_r($user, true));
         return $user;
     }
 
