@@ -44,9 +44,11 @@ class AuthController extends Controller
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/channels.join',
             array(
-                'token' => $token,
-                'name' => $name
-                ));
+                "query" => [
+                    'token' => $token,
+                    'name' => $name
+                ]
+            ));
         $response = json_decode($response->getBody(), true);
         if ($response['ok'] === true) {
             return "Joined $name";
