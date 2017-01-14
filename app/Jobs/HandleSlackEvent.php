@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Credential;
 use Gitlab\Api\Projects;
+use Gitlab\Api\Users;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -119,6 +120,16 @@ class HandleSlackEvent implements ShouldQueue
         $client->authenticate(env('GITLAB_TOKEN'), \Gitlab\Client::AUTH_URL_TOKEN);
 
         //get user's Gitlab user id
+        $api=new Users($client);
+        $users=$user->search($username);
+        $userId = "";
+        foreach ($users as $user) {
+            if($user["username"] == $username) {
+                $userId=$user["id"];
+                Log::info("Obtained user: ".print_r($user, true));
+                break;
+            }
+        }
 
         //get project
         $api = new Projects($client);
@@ -128,6 +139,8 @@ class HandleSlackEvent implements ShouldQueue
             if($project["weburl"] == "https://gitlab.com/hng-interns/getting-started"
             || $project["weburl"] == "http://gitlab.com/hng-interns/getting-started" ) {
                 $projId=$project["id"];
+                Log::info("Obtained user: ".print_r($project, true));
+                break;
             }
         }
         if(!$projId) {
