@@ -35,6 +35,16 @@ class HandleSlackEvent implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->request['event']['type'] == "message") {
+            $rawText=$this->request['event']['text'];
+            $parsedText=$this->parseText($rawText);
+            if($parsedText) {
+                $matchea=[];
+                preg_match("/[\w+]/i", $parsedText['username'], $matches);
+               $result=$this->addToGitlab($matches[0]);
+              if ($result) {}
+        }
+}
         /*if ($this->request['event']['type'] == "message") {
             $userId = $this->request['event']['user'];
             if ($this->request['event']['subtype'] == "channel_join") {
@@ -55,35 +65,29 @@ class HandleSlackEvent implements ShouldQueue
                 $response = $this->respond($data);
             }
         }*/
-            /*if ($this->request['event']['type'] == "team_join") {
-                $firstName= isset($this->request['event']['user']["profile"]["first_name"]) ? $this->request['event']['user']["profile"]["first_name"] : "@<$userId>";
 
-            }
-        }*/
     }
 
-
-    /*
-     * Might be useful later
 
     public function parseText($text)
     {
         $tokens = explode(' ', $text);
         $botUserId=Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if ($tokens[0] == "<@$botUserId>") {
-            if ($tokens[1] == "add" || $tokens[1] == "save") {
+        if (in_array("<@$botUserId>", $tokens)) {
+            if (!empty(preg_grep("/add/i", $tokens)) || (!empty(preg_grep("/gitlab/i", $tokens))) || (!empty(preg_grep("/username/i", $tokens)))) {
                 return array(
-                    'type' => 'add',
-                    'link' => trim($tokens[2], "<>"),
-                    'tags' => array_slice($tokens, 3));
-            } else if ($tokens[1] == "find" || $tokens[1] == "search") {
+                    'type' => 'add-gitlab',
+                    'username' => preg_grep("/@-[\w+]/i", $tokens)[0]
+            }/* else if ($tokens[1] == "find" || $tokens[1] == "search") {
                 return array(
                     'type' => 'search',
                     'query_terms' => array_slice($tokens, 2));
-            }
+            }*/
+          }
+return null;
         }
+return null;
     }
-*/
 
 
     /**
@@ -102,5 +106,15 @@ class HandleSlackEvent implements ShouldQueue
             ));
         return json_decode($response->getBody(), true);
     }
+
+public function addToGitlab ($username) {
+    $client = new \Gitlab\Client('http://git.yourdomain.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here 
+
+//get user's Gitlab user id
+
+//add user to project
+$project = new \Gitlab\Model\Project(1, $client);
+$user=project->addMember($userId, $accessLevel);
+}
 
 }
