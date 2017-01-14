@@ -151,11 +151,10 @@ class HandleSlackEvent implements ShouldQueue
         }
 
         //add user to project
-        $project = new \Gitlab\Model\Project($projId, $client);
 Log::info("User: $userId, project: $projId");
-        $user = $project->addMember($userId, 30);
-        Log::info("Result of add: " . print_r($user, true));
-        return $user;
+        $resp = $api->addMember($projId, $userId, 30);
+        Log::info("Result of add: " . print_r($resp, true));
+        return $resp;
     }
 
 }
