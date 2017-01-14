@@ -42,6 +42,7 @@ class HandleSlackEvent implements ShouldQueue
             if (!isset($this->request['event']['subtype'])) {
                 $rawText = $this->request['event']['text'];
                 $parsedText = $this->parseText($rawText);
+                Log::info("Request: ".print_r($parsedText, true));
                 if (isset($parsedText["type"])) {
                     if ($parsedText["type"] == "gitlab-add") {
                         $result = $this->addToGitlab($parsedText["username"], $parsedText["project"]);
@@ -58,8 +59,6 @@ class HandleSlackEvent implements ShouldQueue
                     }
                 }
             } else if ($this->request['event']['subtype'] == "channel_join") {
-                $userName = preg_match("/@\w+\|(\w+)/i", $this->request['event']['text'], $matches);
-                $userName = $matches[1];
                 $options = array(
                     "Hey there, <@$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_down:\nhttps://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
                     "Hi, <@$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nThe name's hibot. Peace!",
