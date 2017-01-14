@@ -178,6 +178,7 @@ class HandleSlackEvent implements ShouldQueue
         $resp=curl_exec($ch);
 
         $resp= json_decode($resp, true);
+        Log::info("Resp add: ".print_r($resp, true));
         return $resp;
     }
 }
