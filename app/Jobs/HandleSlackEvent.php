@@ -36,6 +36,7 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         if ($this->request['event']['type'] == "message") {
+            if (!isset($this->request['event']['subtype']) || $this->request['event']['subtype']!="channel_join") {
             $rawText = $this->request['event']['text'];
             $parsedText = $this->parseText($rawText);
             if (isset($parsedText["type"])) {
@@ -54,10 +55,9 @@ class HandleSlackEvent implements ShouldQueue
                 }
             }
         }
-        /*if ($this->request['event']['type'] == "message") {
-            $userId = $this->request['event']['user'];
-            if ($this->request['event']['subtype'] == "channel_join") {
-
+            else if ($this->request['event']['subtype'] == "channel_join") {
+            $userName=preg_match("/@\w+\|(\w+)/I", $this->request['event']['text'], $matches);
+            $userName = $userName[1];
                 $options = array(
                     "Hey there, <@$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_down:\nhttps://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
                     "Hi, <@$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nThe name's hibot. Peace!",
@@ -65,7 +65,7 @@ class HandleSlackEvent implements ShouldQueue
                 );
                 $data = array(
                     "team_id" => $this->request['team_id'],
-                    "channel" => $this->request['event']['channel'],
+                    "channel" => "@$userName";
                     "text" => $options[array_rand($options)]
                 );
 
@@ -73,8 +73,8 @@ class HandleSlackEvent implements ShouldQueue
 
                 $response = $this->respond($data);
             }
-        }*/
-
+        }
+      }
     }
 
 
