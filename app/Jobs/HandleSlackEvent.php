@@ -60,11 +60,18 @@ class HandleSlackEvent implements ShouldQueue
                             $data = array(
                                 "team_id" => $this->request['team_id'],
                                 "channel" => $this->request['event']['channel'],
-                                "text" => "Sorry, I couldn't add you, <@$user>. Please ensure you're signed up on gitlab.com, and that you posted your corret gitlab username (including capitalisation, if neccessary), then try again."
+                                "text" => "Sorry, I couldn't add you, <@$user>. Please ensure you're signed up on gitlab.com, and that you posted your correct gitlab username (including capitalisation, if neccessary), then try again."
                             );
                         }
                         $response = $this->respond($data);
 
+                    } else if ($parsedText["type"] == "gitlab-add") {
+                        $user = $this->request['event']['user'];
+                        $data = array(
+                            "team_id" => $this->request['team_id'],
+                            "channel" => $this->request['event']['channel'],
+                            "text" => "Hey, <@$user>. looks like you're having trouble with gitlab. Have you been added to the project? If you aren't sure, please post a message here, telling me your username and the project. Hope this helps"
+                        );
                     }
                 }
             } else if ($this->request['event']['subtype'] == "channel_join") {
@@ -93,15 +100,23 @@ class HandleSlackEvent implements ShouldQueue
         $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
         if (preg_match("/<@$botUserId>/i", $text)) {
             $matches = [];
-            if (preg_match("/username\s*:\s*(\w+)/i", $text, $matches)) {
+            if (preg_match("/username\s*(:)|(is)\s*(\w+)/i", $text, $matches)) {
                 $parsed = array(
                     'type' => 'gitlab-add',
-                    'username' => $matches[1]
+                    'username' => $matches[3]
                 );
-                if (preg_match("/project\s*:\s*(\w+-?\w+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[1]);
+                if (preg_match("/project\s*(:)|(is)\s*(\w+-?\w+)/i", $text, $matches)) {
+                    $parsed["project"] = strtolower($matches[3]);
                 } else $parsed["project"] = "getting-started";
                 Log::info("Parsed: " . print_r($parsed, true));
+                return $parsed;
+            } else if(preg_match("/(\b404\b)/i", $text)
+                || (stripos($text, "gitlab")!==false
+                    && stripos($text, "error")!==false
+                    && stripos($text, "access"))) {
+                $parsed = array(
+                    'type' => 'gitlab-problem-access'
+                );
                 return $parsed;
             }
         }
