@@ -100,12 +100,12 @@ class HandleSlackEvent implements ShouldQueue
         $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
         if (preg_match("/<@$botUserId>/i", $text)) {
             $matches = [];
-            if (preg_match("/username\s*(:)|(is)\s*(\w+)/i", $text, $matches)) {
+            if (preg_match("/username\s*:\s*(\w+)/i", $text, $matches)) {
                 $parsed = array(
                     'type' => 'gitlab-add',
                     'username' => $matches[1]
                 );
-                if (preg_match("/project\s*(:)|(is)\s*(\w+-?\w+)/i", $text, $matches)) {
+                if (preg_match("/project\s*:\s*(\w+-?\w+)/i", $text, $matches)) {
                     $parsed["project"] = strtolower($matches[1]);
                 } else $parsed["project"] = "getting-started";
                 Log::info("Parsed: " . print_r($parsed, true));
