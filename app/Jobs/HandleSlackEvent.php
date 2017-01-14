@@ -74,7 +74,7 @@ class HandleSlackEvent implements ShouldQueue
                 $response = $this->respond($data);
             }
         }
-      }
+      
     }
 
 
