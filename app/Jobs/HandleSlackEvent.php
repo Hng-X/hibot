@@ -36,26 +36,27 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         if ($this->request['event']['type'] == "message") {
-            Log::info("Received request: " . print_r($this->request->all(), true));
+            
+            $userId = $this->request['event']['user']["id"];
+
+            $options = array(
+                "Hey there, @<$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_right: https://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
+                "Hi, @<$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nOops...Forgive my manners...my name's hibot, but my friends call me...hibot :stuck_out_tongue_winking_eye: I hope we'll be friends :blush:",
+                "Welcome to the Hotels.ng remote internship Slack team, @<$user>!\nCheck out :point_right: https://sites.google.com/hotels.ng/internship/home to know how to get started.\nOh, and my name's hibot, but then...I'm just a bot :disappointed:"
+            );
+            $data = array(
+                "team_id" => $this->request['team_id'],
+                "channel" => $this->request['event']['channel'],
+                "text" => $options[array_rand($options)]
+            );
+
+            //respond
+
+            $response = $this->respond($data);
         }
             /*if ($this->request['event']['type'] == "team_join") {
-                $userId = $this->request['event']['user']["id"];
                 $firstName= isset($this->request['event']['user']["profile"]["first_name"]) ? $this->request['event']['user']["profile"]["first_name"] : "@<$userId>";
 
-                $options = array(
-                    "Hey there, @<$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_right: https://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
-                    "Hi, @<$userId>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nOops...Forgive my manners...my name's hibot, but my friends call me...hibot :stuck_out_tongue_winking_eye: I hope we'll be friends :blush:",
-                    "Welcome to the Hotels.ng remote internship Slack team, @<$user>!\nCheck out :point_right: https://sites.google.com/hotels.ng/internship/home to know how to get started.\nOh, and my name's hibot, but then...I'm just a bot :disappointed:"
-                );
-                $data = array(
-                    "team_id" => $this->request['team_id'],
-                    "channel" => $this->request['event']['channel'],
-                    "text" => $options[array_rand($options)]
-                );
-
-                //respond
-
-                $response = $this->respond($data);
             }
         }*/
     }
