@@ -73,6 +73,7 @@ class HandleSlackEvent implements ShouldQueue
                 //respond
 
                 $response = $this->respond($data);
+                Log::info("Response for DM: ".print_r($response, true));
             }
         }
       
