@@ -40,7 +40,6 @@ class HandleSlackEvent implements ShouldQueue
             $parsedText = $this->parseText($rawText);
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
-                    Log::info("Parsed: " . print_r($parsedText, true));
                     $result = $this->addToGitlab($parsedText["username"]);
                     if ($result) {
                         $user=$this->request['event']['user'];
@@ -122,6 +121,8 @@ class HandleSlackEvent implements ShouldQueue
         //get user's Gitlab user id
         $api=new Users($client);
         $users=$api->search($username);
+        Log::info("Obtained search results: ".print_r($users, true);
+        /*
         $userId = "";
         foreach ($users as $user) {
             if($user["username"] == $username) {
@@ -150,7 +151,7 @@ class HandleSlackEvent implements ShouldQueue
         //add user to project
         $project = new \Gitlab\Model\Project($projId, $client);
         $user = $project->addMember($userId, 30);
-        Log::info("Result of add: " . print_r($user, true));
+        Log::info("Result of add: " . print_r($user, true));*/
         return $user;
     }
 
