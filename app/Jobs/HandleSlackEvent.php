@@ -56,7 +56,7 @@ class HandleSlackEvent implements ShouldQueue
             }
         }
             else if ($this->request['event']['subtype'] == "channel_join") {
-            $userName=preg_match("/@\w+\|(\w+)/I", $this->request['event']['text'], $matches);
+            $userName=preg_match("/@\w+\|(\w+)/i", $this->request['event']['text'], $matches);
             $userName = $userName[1];
                 $options = array(
                     "Hey there, <@$userId>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_down:\nhttps://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
