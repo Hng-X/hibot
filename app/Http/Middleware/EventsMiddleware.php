@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Log;
 
 class EventsMiddleware
 {
@@ -22,8 +21,7 @@ class EventsMiddleware
         if ($request->input('event.type') == "message"
             && (!($request->has('event.subtype'))
                 || ($request->input('event.subtype') == "channel_join"))) {
-                Log::info("Request: " . print_r($request->all(), true));
-                return $next($request);
+            return $next($request);
             }
         return response('Ok', 200);
     }
