@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Linxer - Save the stuff that matters to you </title>
+	<title>hibot - bot for hotels.ng internship</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,12 +13,12 @@
 		<header>
 			<div class="header__wrapper">
 				<div class="logo">
-					<h1 class="logo__text">Linxer</h1>
+					<h1 class="logo__text">hibot</h1>
 				</div>
 				<div class="signin">
                     <p>Your team's already using hibot?</p>
 					<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team&client_id={{ env("SLACK_CLIENT_ID") }}&redirect_uri=http://hibotapp.herokuapp.com/auth/signin">
-						<button class="signin-btn"><span>See your links</span></button>
+						<button class="signin-btn"><span>Sign in</span></button>
 					</a>
 				</div>
 			</div>
@@ -55,6 +55,7 @@
 
 		<footer>
 			<p>made with ❤️ by <a href="">hngX</a></p>
+            <p><small>hibot is not endorsed by or officially affiliated with hotels.ng</small></p>
 		</footer>
 	</div>
 </body>
