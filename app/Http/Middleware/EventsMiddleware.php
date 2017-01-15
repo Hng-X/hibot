@@ -18,6 +18,11 @@ class EventsMiddleware
         if ($request->input("type") == "url_verification") {
             return response($request->input("challenge"), 200);
         }
-        return $next($request);
+        if ($request->input('event.type') == "message"
+            && (!($request->has('event.subtype'))
+                || ($request->input('event.subtype') == "channel_join"))) {
+            return $next($request);
+            }
+        return response('Ok', 200);
     }
 }

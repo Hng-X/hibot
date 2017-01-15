@@ -15,15 +15,10 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/links/{teamSlug}', 'WebController@viewLinks');
-
 //---- bot events route
-Route::post('/links', 'BotController@receive');
-
-//test route to test bot response
-Route::get('/test', 'BotController@test');
+Route::post('/events', 'BotController@receive');
 
 /* Slack Authorization Routers */
 
-Route::get('/Auth/add', 'AuthController@authorizeSlack');
-Route::get('/Auth/signin', 'AuthController@redirectUsertoTeamLinks');
+Route::get('/auth/add', 'AuthController@authorizeSlack');
+Route::get('/auth/signin', 'AuthController@redirectUsertoTeamLinks');

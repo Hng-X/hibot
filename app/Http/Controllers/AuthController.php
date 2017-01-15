@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Credential;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -13,9 +14,13 @@ class AuthController extends Controller
         $code = $_GET['code'];
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/oauth.access',
-            ['query' => ['client_id' => '104593454705.107498116711',
-                'client_secret' => env('SLACK_CLIENT_SECRET'),
-                'code' => $code]]);
+            array(
+                'query' => [
+                    'client_id' => env('SLACK_CLIENT_ID'),
+                    'client_secret' => env('SLACK_CLIENT_SECRET'),
+                    'code' => $code
+                ]
+            ));
         $response = json_decode($response->getBody(), true);
         if ($response['ok'] === true) {
             if (isset($response['access_token'])) {
@@ -26,26 +31,53 @@ class AuthController extends Controller
                 $credential->bot_access_token = $response['bot']['bot_access_token'];
                 $credential->save();
             }
-            $result = "Authorized";
+            //join the channel so you can receive events from there
+            $joined = $this->joinChannel($response['access_token']);
+            $result = "Authorized\n" . $joined;
         } else {
             $result = $response['error'];
         }
         return view('Auth/add', ['result' => $result]);
     }
 
-    /* Redirects user to teams links Page
-    *
-    *
-    */
+    public function joinChannel($token, $name = "random")
+    {
+        $client = new Client();
+        $response = $client->request('GET', 'https://slack.com/api/channels.join',
+            array(
+                "query" => [
+                    'token' => $token,
+                    'name' => $name
+                ]
+            ));
+        $response = json_decode($response->getBody(), true);
+        if ($response['ok'] === true) {
+            Log::info("Joined: " . print_r($response, true));
+            return "Joined $name";
+        } else {
+            Log::info("Couldnt join: " . print_r($response, true));
+            return "Couldnt join";
+        }
+    }
+
+    /** Redirects user to teams links Page
+     *
+     *
+     */
     public function redirectUsertoTeamLinks()
     {
         $code = $_GET['code'];
         $client = new Client();
         $response = $client->request('GET', 'https://slack.com/api/oauth.access',
-            ['query' => ['client_id' => '104593454705.107498116711',
-                'client_secret' => env('SLACK_CLIENT_SECRET'),
-                'redirect_uri' => 'http://linxer.herokuapp.com/Auth/signin',
-                'code' => $code]]);
+            array(
+                'query' => [
+                    'client_id' => env('SLACK_CLIENT_ID'),
+                    'client_secret' => env('SLACK_CLIENT_SECRET'),
+                    'redirect_uri' => 'http://linxer.herokuapp.com/Auth/signin',
+                    'code' => $code
+                ]
+            )
+        );
         $response = json_decode($response->getBody(), true);
         $team_id = $response['team']['id'];
         $access_token = $response['access_token'];
