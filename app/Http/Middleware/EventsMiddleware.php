@@ -22,7 +22,7 @@ class EventsMiddleware
         if ($request->input('event.type') == "message"
             && (!($request->has('event.subtype'))
                 || ($request->input('event.subtype') == "channel_join"))) {
-                Log::info("Request: " . print_r($request->all, true));
+                Log::info("Request: " . print_r($request->all(), true));
                 return $next($request);
             }
         return response('Ok', 200);
