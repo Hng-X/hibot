@@ -9,6 +9,7 @@ class BotController extends Controller
 {
     /**
      * Ensures the app has been verified and the token is correct
+     * Also filters out our events
      */
     function __construct()
     {
