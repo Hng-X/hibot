@@ -36,13 +36,13 @@ class HandleSlackEvent implements ShouldQueue
     public function handle()
     {
         $userId = $this->request['event']['user'];
+        Log::info("Job::: " . print_r($this->request, true));
 
         if ($this->request['event']['subtype'] == "channel_join") {
             SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
             $rawText = $this->request['event']['text'];
             $parsedText = $this->parseText($rawText);
-            Log::info("Parsed: " . print_r($parsedText, true));
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
                     $result = Custom::addToGitlab($parsedText["username"], $parsedText["project"]);
