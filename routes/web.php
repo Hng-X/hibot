@@ -18,12 +18,6 @@ Route::get('/', function () {
 //---- bot events route
 Route::post('/events', 'BotController@receive');
 
-Route::get('/links/{teamSlug}', 'WebController@viewLinks');
-
-
-//test route to test bot response
-Route::get('/test', 'BotController@test');
-
 /* Slack Authorization Routers */
 
 Route::get('/auth/add', 'AuthController@authorizeSlack');
