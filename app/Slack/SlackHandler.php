@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: J
- * Date: 15/01/2017
- * Time: 15:40
- */
 
 namespace App\Slack;
 
