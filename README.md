@@ -24,7 +24,8 @@ hibot is not (yet) endorsed by or affiliated with Hotels.ng
 
 ## Contributors
 Hng-X...
-...and you can be one. Just...er, contribute. Okay, just comment on this file.
+
+...and you can be one. Just...er, contribute. Fin an issue or suggest a feature, and you're on.
 
 ## Thanks for dropping by
 We'd ask you to star, but...please STAR! But do look through the code too, and let us know any issues or bad practices you find. Don't forget to check out [hubot](https://github.com/Hng-X/hubot) too. Have a great day!
