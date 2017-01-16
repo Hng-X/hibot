@@ -2,6 +2,10 @@
 
 namespace App\Slack;
 
+use App\Models\Credential;
+
+use GuzzleHttp\Client;
+
 
 class SlackMessage
 {
@@ -20,7 +24,24 @@ class SlackMessage
 
     public function send()
     {
-        return SlackHandler::dispatch($this);
+       $client = new Client();
+       $response = $client->request('GET', 'https://slack.com/api/chat.postMessage',
+
+array(
+
+'query' => [
+
+'token' => Credential::where('team_id', $this->team)->first()->bot_access_token,
+
+'channel' => $this->channel,
+
+'text' => $this->text
+
+]
+
+));
+
+return json_decode($response->getBody(), true);
     }
 
     public function toArray()
