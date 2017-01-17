@@ -15,11 +15,14 @@ class SlackMessage
 
     protected $team;
 
-    public function __construct($teamId, $channelId, $text)
+    protected $asUser;
+
+    public function __construct($teamId, $channelId, $text, $asUser= true)
     {
         $this->team = $teamId;
         $this->channel = $channelId;
         $this->text = $text;
+        $this->asUser = $asUser;
     }
 
     public function send()
@@ -35,7 +38,8 @@ array(
 
 'channel' => $this->channel,
 
-'text' => $this->text
+'text' => $this->text,
+'as_user' => $this->asUser
 
 ]
 
@@ -50,6 +54,7 @@ return json_decode($response->getBody(), true);
             "team_id" => $this->team,
             "channel_id" => $this->channel,
             "text" => $this->text
+            "as_user" => $this->asUser
         );
     }
 
