@@ -53,7 +53,7 @@ return json_decode($response->getBody(), true);
         return array(
             "team_id" => $this->team,
             "channel_id" => $this->channel,
-            "text" => $this->text
+            "text" => $this->text,
             "as_user" => $this->asUser
         );
     }
