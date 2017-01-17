@@ -42,7 +42,8 @@ class HandleSlackEvent implements ShouldQueue
             $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
             $rawText = $this->request['event']['text'];
-            $parsedText = $this->parseText($rawText);
+            $mustMention = !(preg_match('/^D/', $this->request['event']['channel']));
+            $parsedText = $this->parseText($rawText, $mustMention);
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {
                     $result = Custom::addToGitlab($parsedText["username"], $parsedText["project"]);
@@ -57,10 +58,11 @@ class HandleSlackEvent implements ShouldQueue
         }
     }
 
-    public function parseText($text)
+    public function parseText($text, $mustMention=true)
     {
         $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if (preg_match("/<@$botUserId>/i", $text)) {
+        if (($mustMention && preg_match("/<@$botUserId>/i", $text))
+        || !$mustMention) {
             $matches = [];
             if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
                 $parsed = array(
