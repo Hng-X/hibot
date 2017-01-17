@@ -20,7 +20,7 @@ class EventsMiddleware
         }
         if (($request->input('event.type') == "message"
             && !($request->has('event.subtype')))
-                || ($request->input('event.subtype') == "team_join")) {
+                || ($request->input('event.type') == "team_join")) {
             return $next($request);
             }
         return response('Ok', 200);
