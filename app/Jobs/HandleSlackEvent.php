@@ -104,7 +104,7 @@ class HandleSlackEvent implements ShouldQueue
         return [];
     }
 
-function findEmail($text) 
+public function findEmail($text) 
 { 
 $v = "/[\w-\.+]+@[\w-\.-]+.[\w-\.]+/i"; 
 $matches=[];
