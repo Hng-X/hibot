@@ -64,7 +64,7 @@ Accept-Language: en-US,en;q=0.8"
 Log::info("Conjure response: $resp");
 
 
-        return ($resp=="[\"User has already been added. To resent pending user's invite, click \"Edit\" then \"Resent Invite\"\"]");
+        return (bool)preg_match("/User has already been added./i", $resp);
     }
 
     public static function sendAddResult($success, array $data)
