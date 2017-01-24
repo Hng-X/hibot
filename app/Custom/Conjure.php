@@ -10,6 +10,8 @@ namespace App\Custom;
 
 
 use App\Slack\SlackMessage;
+use Illuminate\Support\Facades\Log;
+
 
 class Conjure {
 
