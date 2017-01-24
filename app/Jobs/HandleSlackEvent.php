@@ -77,6 +77,7 @@ class HandleSlackEvent implements ShouldQueue
                         'email' => $email
                     );
                 }
+Log::info("Conjure parsed: ". print_r($parsed));
                 return $parsed;
             }
             else if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
