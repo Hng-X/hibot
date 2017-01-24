@@ -60,6 +60,7 @@ Accept-Language: en-US,en;q=0.8"
 
         $resp = curl_exec($ch);
         $resp = curl_exec($ch);
+Log::info("Conjure response: $resp");
 
 
         return ($resp=="[\"User has already been added. To resent pending user's invite, click \"Edit\" then \"Resent Invite\"\"]");
@@ -73,6 +74,10 @@ Accept-Language: en-US,en;q=0.8"
 
         if($success) {
             $text = "Added to Conjure! <@$user>";
+            $message = new SlackMessage($team, $channel, $text);
+            return $message->send();
+        } else {
+$text = "Couldn't add you to Conjure, <@$user>";
             $message = new SlackMessage($team, $channel, $text);
             return $message->send();
         }
