@@ -77,11 +77,7 @@ class HandleSlackEvent implements ShouldQueue
                         'email' => $email
                     );
                 }
-<<<<<<< HEAD
 
-=======
-Log::info("Conjure parsed: ". print_r($parsed));
->>>>>>> branch 'dev' of https://github.com/Hng-X/hibot
                 return $parsed;
             }
             else if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
