@@ -70,7 +70,7 @@ class HandleSlackEvent implements ShouldQueue
         || !$mustMention) {
             $matches = [];
             if(preg_match("/conjure/i", $text)) {
-                if($email=findEmail($text)) {
+                if($email=$this->findEmail($text)) {
 
                     $parsed = array(
                         'type' => 'conjure-add',
