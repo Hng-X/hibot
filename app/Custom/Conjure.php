@@ -55,6 +55,7 @@ Accept-Language: en-US,en;q=0.8"
         ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
             "email" => $email,
+            "project_id" => 621,
             "group" => 1,
             "name" => "",
             "status" => "pending")));
