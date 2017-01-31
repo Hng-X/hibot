@@ -20,7 +20,9 @@ class PivotalTracker
             array(
                 "form_params" => [
                     "email" => $email,
-                    "role" => "member"]));
+                    "role" => "viewer"],
+                "headers" => [
+                    "Content-Type: " => "application/json"]));
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
