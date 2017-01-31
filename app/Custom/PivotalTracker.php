@@ -22,7 +22,8 @@ class PivotalTracker
                     "Content-Type" => "application/json"),
             array(
                 "email" => $email,
-                "role" => "member"
+                "role" => "member",
+                "name" => "member",
             ));
             Log::info("Request:_".$req->getBody());
             $resp = $client->send($req);
