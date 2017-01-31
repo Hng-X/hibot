@@ -117,10 +117,10 @@ class HandleSlackEvent implements ShouldQueue
 
 public function findEmail($text) 
 { 
-$v = "/[\w]+@[\w]+.[\w]+/i"; 
+$v = "/mailto:(.+@.+)|/i"; 
 $matches=[];
 preg_match($v, $text, $matches); 
-return $matches[0];
+return $matches[1];
 }
 
 
