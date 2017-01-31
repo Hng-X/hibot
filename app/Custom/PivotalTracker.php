@@ -71,14 +71,17 @@ class PivotalTracker
         $user = $data['event']['user'];
         $channel = $data['event']['channel'];
 
-        if ($result != null && $result["role"] == "member") {
+        if ($result != null && array_key_exists("role", $result) && $result["role"] == "member") {
             $text = "Added to Pivotal project: $project! <@$user>";
             $message = new SlackMessage($team, $channel, $text);
-            return $message->send();
-        } else {
-            $text = "Sorry, I couldn't add you to *$project*, <@$user>. Please double-check your email and try again. ";
+    } else if ($result != null && array_key_exists("general_problem", $result) && preg_match("/is already a project member/", $result["general_problem"]) {
+            $text = "Looks like you've already been added, <@$user>.";
             $message = new SlackMessage($team, $channel, $text);
-            return $message->send();
-        }
+    } else {
+        $text = "Oops, something must have gone wrong, <@$user>.  Please double-check your email and try again. ";
+        $message = new SlackMessage($team, $channel, $text);
+    }
+        return $message->send();
+
     }
 }
