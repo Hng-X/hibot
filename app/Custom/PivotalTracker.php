@@ -20,10 +20,10 @@ class PivotalTracker
             $req = new Request("POST", "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships",
                 array("X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN"),
                     "Content-Type" => "application/json"),
-            json_encode(array(
+            array(
                 "email" => $email,
                 "role" => "member"
-            )));
+            ));
             Log::info("Request:_".$req->getBody());
             $resp = $client->send($req);
         } catch (\Exception $e) {
