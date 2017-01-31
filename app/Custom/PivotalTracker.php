@@ -3,6 +3,7 @@
 namespace App\Custom;
 
 use App\Slack\SlackMessage;
+use Buzz\Exception\RequestException;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
@@ -15,14 +16,18 @@ class PivotalTracker
         Log::info("email:".$email);
 
         //add user to project
-        $resp = $client->request("POST",
-            "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships",
-            array(
-                "json" => [
-                    "email" => $email,
-                    "role" => "member"],
-                "headers" => [
-                    "X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN")]));
+        try{
+            $resp = $client->request("POST",
+                "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships",
+                array(
+                    "json" => [
+                        "email" => $email,
+                        "role" => "member"],
+                    "headers" => [
+                        "X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN")]));
+        } catch (RequestException $e) {
+            Log::info("Resp add: " . $e->getRequest()->getContent());
+        }
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
