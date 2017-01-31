@@ -51,7 +51,7 @@ class PivotalTracker
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postfields));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "X-TrackerToken: ".env("PIVOTAL_TRACKER_TOKEN"),
-            "Content-Type: application/json"),
+            "Content-Type: application/json"
         ));
         $resp = curl_exec($ch);
         Log::info("Request add: " . http_build_query($postfields));
