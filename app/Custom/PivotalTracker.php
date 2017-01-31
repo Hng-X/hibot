@@ -22,7 +22,7 @@ class PivotalTracker
                     "email" => $email,
                     "role" => "member"],
                 "headers" => [
-                    "X-TrackerToken: " => env("PIVOTAL_TRACKER_TOKEN")]));
+                    "X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN")]));
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
