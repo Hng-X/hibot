@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Custom\Conjure;
 use App\Custom\Gitlab;
-use App\Custom\PivotalTracker as Pivotal;
+use App\Custom\PivotalTracker;
 use App\Models\Credential;
 use App\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
@@ -52,8 +52,8 @@ class HandleSlackEvent implements ShouldQueue
                     Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
 
                 } else if ($parsedText["type"] == "pivotal-add") {
-                    $result = Pivotal::addToPivotal($parsedText["email"]);
-                    Pivotal::sendPivotalAddResult($result,  $this->request);
+                    $result = PivotalTracker::addToPivotal($parsedText["email"]);
+                    PivotalTracker::sendPivotalAddResult($result,  $this->request);
                 } else if ($parsedText["type"] == "conjure-add") {
                     $result = Conjure::addToConjure($parsedText["email"]);
                     Conjure::sendAddResult($result, $this->request);
