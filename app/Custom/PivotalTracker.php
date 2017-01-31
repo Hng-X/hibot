@@ -4,7 +4,6 @@ namespace App\Custom;
 
 use App\Slack\SlackMessage;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Log;
 
 class PivotalTracker
@@ -16,23 +15,54 @@ class PivotalTracker
         Log::info("email:".$email);
 
         //add user to project
-        try{
+        /*try{
             $req = new Request("POST", "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships",
                 array("X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN"),
                     "Content-Type" => "application/json"),
             array(
                 "email" => $email,
-                "role" => "member",
-                "name" => "member",
+                "role" => "member"
             ));
             Log::info("Request:_".$req->getBody());
             $resp = $client->send($req);
         } catch (\Exception $e) {
             dd($e);
         }
+        */
+
+
+        $ch = curl_init();
+        $cookieFile = "cookie.txt";
+
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $postfields = array(
+        "email" => $email,
+            "role" => "member"
+        );
+
+        curl_setopt($ch, CURLOPT_URL, "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships");
+
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postfields));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "X-TrackerToken: ".env("PIVOTAL_TRACKER_TOKEN"),
+            "Content-Type: application/json"),
+        ));
+        $resp = curl_exec($ch);
+        Log::info("Request add: " . http_build_query($postfields));
+        $resp = json_decode($resp, true);
+        Log::info("Resp add: " . print_r($resp, true));
+        return $resp;
+        /*
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
+        */
     }
 
     public static function sendPivotalAddResult($result, array $data, $project="Factory_core")
