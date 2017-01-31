@@ -3,7 +3,6 @@
 namespace App\Custom;
 
 use App\Slack\SlackMessage;
-use Buzz\Exception\ClientException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Log;
@@ -27,8 +26,8 @@ class PivotalTracker
             )));
             Log::info("Request:_".$req->getBody());
             $resp = $client->send($req);
-        } catch (ClientException $e) {
-            Log::info("Resp add: " . $e->getMessage());
+        } catch (\Exception $e) {
+            dd($e);
         }
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
