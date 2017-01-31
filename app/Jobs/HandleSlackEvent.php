@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Custom\Conjure;
 use App\Custom\Gitlab;
+use App\Custom\PivotalTracker as Pivotal;
 use App\Models\Credential;
 use App\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
@@ -50,10 +51,9 @@ class HandleSlackEvent implements ShouldQueue
                     $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
                     Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
 
-                } else if ($parsedText["type"] == "gitlab-problem-access") {
-                    $text = "Hey, <@$userId>. looks like you're having trouble with gitlab. Have you been added to the project? If you aren't sure, please post a message here, telling me your username and the project. Hope this helps.";
-                    $message = new SlackMessage($this->request["team_id"], $userId, $text);
-                    $message->send();
+                } else if ($parsedText["type"] == "pivotal-add") {
+                    $result = Pivotal::addToPivotal($parsedText["email"]);
+                    Pivotal::sendPivotalAddResult($result,  $this->request);
                 } else if ($parsedText["type"] == "conjure-add") {
                     $result = Conjure::addToConjure($parsedText["email"]);
                     Conjure::sendAddResult($result, $this->request);
@@ -74,6 +74,16 @@ class HandleSlackEvent implements ShouldQueue
 
                     $parsed = array(
                         'type' => 'conjure-add',
+                        'email' => $email
+                    );
+                }
+
+                return $parsed;
+            } else if(preg_match("/pivotal/i", $text)) {
+                if($email=$this->findEmail($text)) {
+
+                    $parsed = array(
+                        'type' => 'pivotal-add',
                         'email' => $email
                     );
                 }
