@@ -19,7 +19,7 @@ class PivotalTracker
             "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships?token=".env("PIVOTAL_TRACKER_TOKEN"),
             array(
                 "form_params" => [
-                    "email" => "$email",
+                    "email" => $email,
                     "role" => "member"],
                 "headers" => [
                     "Content-Type: " => "application/json"]));
