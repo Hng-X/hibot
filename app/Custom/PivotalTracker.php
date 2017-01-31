@@ -16,9 +16,9 @@ class PivotalTracker
 
         //add user to project
         $resp = $client->request("POST",
-            "https://pivotaltracker.com/services/v5/projects/$projId/memberships?token=".env("PIVOTAL_TRACKER_TOKEN"),
+            "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships?token=".env("PIVOTAL_TRACKER_TOKEN"),
             array(
-                "form_params" => [
+                "json" => [
                     "email" => "$email",
                     "role" => "member"],
                 "headers" => [
