@@ -12,10 +12,16 @@ class PivotalTracker
     public static function addToPivotal($email, $projId = "1961795")
     {
         $client = new Client();
-Log::info("email:".$email);
+        Log::info("email:".$email);
+
         //add user to project
-        $resp = $client->request("POST", "https://pivotaltracker.com/services/v5/projects/$projId/memberships", array("json" => ["email" => $email, "role" => "member"],
-"headers" => ["X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN"),]));
+        $resp = $client->request("POST",
+            "https://pivotaltracker.com/services/v5/projects/$projId/memberships",
+            array(
+                "query" => ["email" => $email, "role" => "member"],
+                "headers" => [
+                    "X-TrackerToken: " => env("PIVOTAL_TRACKER_TOKEN"),
+                    "Content-Type: " => "application/json"]));
         $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
