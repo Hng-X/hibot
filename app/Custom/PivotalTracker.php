@@ -78,7 +78,7 @@ class PivotalTracker
             $text = "Looks like you've already been added, <@$user>.";
             $message = new SlackMessage($team, $channel, $text);
         } else {
-        $text = "Oops, something must have gone wrong, <@$user>.  Please double-check your email and try again. ";
+        $text = "Oops, something must have gone wrong, <@$user>.  Please make sure you've signed up on pivotaltracker.com, and try again.";
         $message = new SlackMessage($team, $channel, $text);
         }
         return $message->send();
