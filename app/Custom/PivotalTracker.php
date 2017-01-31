@@ -18,7 +18,7 @@ class PivotalTracker
         $resp = $client->request("POST",
             "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships?token=".env("PIVOTAL_TRACKER_TOKEN"),
             array(
-                "json" => [
+                "form_params" => [
                     "email" => "$email",
                     "role" => "member"],
                 "headers" => [
