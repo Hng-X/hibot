@@ -3,6 +3,7 @@
 namespace App\Custom;
 
 use App\Slack\SlackMessage;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
 class PivotalTracker
@@ -10,34 +11,12 @@ class PivotalTracker
 
     public static function addToPivotal($email, $projId = "1961795")
     {
-        Log::info("email:".$email);
-
-        $ch = curl_init();
-        $cookieFile = "cookie.txt";
-
-        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        $postfields = array(
-            "email" => $email,
-            "role" => "member"
-        );
-
-        curl_setopt($ch, CURLOPT_URL, "https://pivotaltracker.com/services/v5/projects/$projId/memberships");
-
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postfields));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "X-Tracker-Token: " .env("PIVOTAL_TRACKER_TOKEN"),
-            "Content-Type: application/json"
-        ));
-        $resp = curl_exec($ch);
-
-        $resp = json_decode($resp, true);
+        $client = new Client();
+Log::info("email:".$email);
+        //add user to project
+        $resp = $client->request("POST", "https://pivotaltracker.com/services/v5/projects/$projId/memberships", array("json" => ["email" => $email, "role" => "member"],
+"headers" => ["X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN"),]));
+        $resp = json_decode($resp->getBody(), true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
     }
