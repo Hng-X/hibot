@@ -61,7 +61,7 @@ return array(
 
             /*
              * PHP class name located in the namespace \App\Custom
-             * The static method run() is called,
+             * The method run() is called,
              * with the original request body (as an array)
              * and then the extracted values above passedin as params
              * where they can be accessed as $valueName
