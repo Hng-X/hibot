@@ -3,7 +3,6 @@
 namespace App\Custom;
 
 use App\Slack\SlackMessage;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
 class PivotalTracker
@@ -11,25 +10,7 @@ class PivotalTracker
 
     public static function addToPivotal($email, $projId = "1961795")
     {
-        $client = new Client();
         Log::info("email:".$email);
-
-        //add user to project
-        /*try{
-            $req = new Request("POST", "https://www.pivotaltracker.com/services/v5/projects/$projId/memberships",
-                array("X-TrackerToken" => env("PIVOTAL_TRACKER_TOKEN"),
-                    "Content-Type" => "application/json"),
-            array(
-                "email" => $email,
-                "role" => "member"
-            ));
-            Log::info("Request:_".$req->getBody());
-            $resp = $client->send($req);
-        } catch (\Exception $e) {
-            dd($e);
-        }
-        */
-
 
         $ch = curl_init();
         $cookieFile = "cookie.txt";
@@ -58,11 +39,6 @@ class PivotalTracker
         $resp = json_decode($resp, true);
         Log::info("Resp add: " . print_r($resp, true));
         return $resp;
-        /*
-        $resp = json_decode($resp->getBody(), true);
-        Log::info("Resp add: " . print_r($resp, true));
-        return $resp;
-        */
     }
 
     public static function sendPivotalAddResult($result, array $data, $project="Factory_core")
@@ -78,8 +54,8 @@ class PivotalTracker
             $text = "Looks like you've already been added, <@$user>.";
             $message = new SlackMessage($team, $channel, $text);
         } else {
-        $text = "Oops, something must have gone wrong, <@$user>.  Please make sure you've signed up on pivotaltracker.com, and try again.";
-        $message = new SlackMessage($team, $channel, $text);
+            $text = "Oops, something must have gone wrong, <@$user>.  Please make sure you've signed up on pivotaltracker.com, and try again.";
+            $message = new SlackMessage($team, $channel, $text);
         }
         return $message->send();
 
