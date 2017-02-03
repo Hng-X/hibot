@@ -45,6 +45,7 @@ class HandleSlackEvent implements ShouldQueue
         } else {
             $rawText = $this->request['event']['text'];
             $mustMention = !(preg_match('/^D/', $this->request['event']['channel']));
+
             $parsedText = $this->parseText($rawText, $mustMention);
             if (isset($parsedText["type"])) {
                 if ($parsedText["type"] == "gitlab-add") {

@@ -46,11 +46,13 @@ return array(
              * "containsType" can only be one of the following:
              * "{email}",
              *
+             * The rules are all joined by ANDs
+             *
              * To extract a parenthesized regex pattern into a variable,
-             * put the name of the variable (in order) in square bracket
+             * put the name of the variable (in order) after the type (space-separated)
             */
             "parse" => array(
-                "containsAll[username]" => array(
+                "containsAll username" => array(
                     "/gitlab/i",
                     "/username\s*:\s*([^@\s]+)/i"
                 ),
@@ -74,10 +76,10 @@ return array(
                 "containsAll" => array(
                     "/pivotal/i"
                 ),
-                "containsType[email]" => array(
+                "containsType email" => array(
                     "{email}",
                 ),
-                "canContain[project]" => array(
+                "canContain project" => array(
                     "/project\s*:\s*([^@\s]+)/"
                 )
             ),
