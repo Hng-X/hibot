@@ -3,7 +3,6 @@
 namespace App\Slack;
 
 use App\Models\Credential;
-
 use GuzzleHttp\Client;
 
 
@@ -17,35 +16,38 @@ class SlackMessage
 
     protected $asUser;
 
-    public function __construct($teamId, $channelId, $text, $asUser= true)
+    public function __construct($teamId, $channelId, $text, $asUser = null)
     {
         $this->team = $teamId;
         $this->channel = $channelId;
         $this->text = $text;
-        $this->asUser = $asUser;
+        if($asUser)
+            $this->asUser = $asUser;
+        else
+            $this->asUser = config("bot.as_user");
     }
 
     public function send()
     {
-       $client = new Client();
-       $response = $client->request('GET', 'https://slack.com/api/chat.postMessage',
+        $client = new Client();
+        $response = $client->request('GET', 'https://slack.com/api/chat.postMessage',
 
-array(
+            array(
 
-'query' => [
+                'query' => [
 
-'token' => Credential::where('team_id', $this->team)->first()->bot_access_token,
+                    'token' => Credential::where('team_id', $this->team)->first()->bot_access_token,
 
-'channel' => $this->channel,
+                    'channel' => $this->channel,
 
-'text' => $this->text,
-'as_user' => $this->asUser
+                    'text' => $this->text,
+                    'as_user' => $this->asUser
 
-]
+                ]
 
-));
+            ));
 
-return json_decode($response->getBody(), true);
+        return json_decode($response->getBody(), true);
     }
 
     public function toArray()
@@ -60,12 +62,9 @@ return json_decode($response->getBody(), true);
 
     public static function sendWelcomeMessage($user, $team)
     {
-        $welcomeMessages = array(
-            "Hey there, <@$user>! Welcome to the Hotels.ng remote internship Slack team. I'm hibot, your friendly neighbourhood bot.\nHere's everything you need to know to get up and running :point_down:\nhttps://sites.google.com/hotels.ng/internship/home\nGreat to have you here. We'e gonna have lots of ~fun~ coding/design together!",
-            "Hi, <@$user>! Welcome to the Hotels.ng remote internship Slack team.\nGot any questions? Go here first :point_right: https://sites.google.com/hotels.ng/internship/home\nThe name's hibot. Peace!",
-            "Welcome to the Hotels.ng remote internship Slack team, <@$user>!\nCheck out :point_right: https://sites.google.com/hotels.ng/internship/home for how to get started.\nMy name's hibot. Pleased to meet you. :wave:"
-        );
-        $message = new SlackMessage($team, $user, $welcomeMessages[array_rand($welcomeMessages)]);
+        $welcomeMessages = config("bot.welcome.messages");
+        $text = str_replace("@{user}", "<@$user>", $welcomeMessages[array_rand($welcomeMessages)]);
+        $message = new SlackMessage($team, $user, $text);
         return $message->send();
     }
 }

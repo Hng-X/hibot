@@ -40,7 +40,7 @@ class HandleSlackEvent implements ShouldQueue
         $userId = isset($this->request['event']['user']) ? $this->request['event']['user'] : $this->request['event']['user']['id'];
         Log::info("Job::: " . print_r($this->request, true));
 
-        if ($this->request['event']['type']== "team_join") {
+        if ($this->request['event']['type']== "team_join" &&  config("bot.welcome.on")) {
             $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
             $rawText = $this->request['event']['text'];
