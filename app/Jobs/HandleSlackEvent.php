@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
-use App\HNG\Custom;
-use App\Models\Credential;
+use App\Custom\Conjure;
+use App\Custom\Gitlab;
+use App\Custom\PivotalTracker;
+use App\Slack\MessageParser;
 use App\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,58 +37,26 @@ class HandleSlackEvent implements ShouldQueue
      */
     public function handle()
     {
-        $userId = $this->request['event']['user'];
+        $userId = isset($this->request['event']['user']) ? $this->request['event']['user'] : $this->request['event']['user']['id'];
         Log::info("Job::: " . print_r($this->request, true));
 
-        if (isset($this->request['event']['subtype'])
-            && $this->request['event']['subtype']== "channel_join") {
+        if ($this->request['event']['type'] == "team_join" && config("bot.welcome.on")) {
             $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
-            $rawText = $this->request['event']['text'];
-            $parsedText = $this->parseText($rawText);
-            if (isset($parsedText["type"])) {
-                if ($parsedText["type"] == "gitlab-add") {
-                    $result = Custom::addToGitlab($parsedText["username"], $parsedText["project"]);
-                    Custom::sendGitlabAddResult($result, $parsedText["project"], $this->request);
+            $parsedText = MessageParser::request($this->request)->parse();
 
-                } else if ($parsedText["type"] == "gitlab-problem-access") {
-                    $text = "Hey, <@$userId>. looks like you're having trouble with gitlab. Have you been added to the project? If you aren't sure, please post a message here, telling me your username and the project. Hope this helps.";
-                    $message = new SlackMessage($this->request["team_id"], $userId, $text);
-                    $message->send();
-                }
+            if ($parsedText["type"] == "gitlab-add") {
+                $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
+                Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
+
+            } else if ($parsedText["type"] == "pivotal-add") {
+                $result = PivotalTracker::addToPivotal($parsedText["email"]);
+                PivotalTracker::sendPivotalAddResult($result, $this->request);
+            } else if ($parsedText["type"] == "conjure-add") {
+                $result = Conjure::addToConjure($parsedText["email"]);
+                Conjure::sendAddResult($result, $this->request);
+
             }
         }
     }
-
-    public function parseText($text)
-    {
-        $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if (preg_match("/<@$botUserId>/i", $text)) {
-            $matches = [];
-            if (preg_match("/username\s*:\s*(\w+)/i", $text, $matches)) {
-                $parsed = array(
-                    'type' => 'gitlab-add',
-                    'username' => $matches[1]
-                );
-                if (preg_match("/project\s*:\s*(\w+-?\w+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[1]);
-                } else $parsed["project"] = "getting-started";
-                Log::info("Parsed: " . print_r($parsed, true));
-                return $parsed;
-            }
-        }
-        if (preg_match("/(\b404\b)/i", $text)
-            || (stripos($text, "gitlab") !== false
-                && stripos($text, "error") !== false
-                && stripos($text, "access"))
-        ) {
-            $parsed = array(
-                'type' => 'gitlab-problem-access'
-            );
-            return $parsed;
-        }
-        return [];
-    }
-
-
 }

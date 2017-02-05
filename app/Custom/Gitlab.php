@@ -1,13 +1,13 @@
 <?php
 
-namespace App\HNG;
+namespace App\Custom;
 
 use App\Slack\SlackMessage;
 use Gitlab\Api\Projects;
 use Gitlab\Api\Users;
 use Illuminate\Support\Facades\Log;
 
-class Custom
+class Gitlab
 {
 
     public static function addToGitlab($username, $projectName = "getting-started")
