@@ -1,5 +1,8 @@
 # Hibot
 
+<p align="center"><a href="http://makeapullrequest.com"><img  alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square"></a>
+<img src="https://heroku-badge.herokuapp.com/?app=hibotapp" /></p>
+
 Call it "hai-bot" or call it "he-bot". Either way, it's a Slack bot built for the 2017 hotels.ng remote internship Slack team
 
 ## Why hibot?
