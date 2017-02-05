@@ -2,7 +2,8 @@
 
 namespace DummyNamespace;
 
-use App\Actions\Action
+use App\Actions\Action;
+use App\Slack\SlackMessage;
 
 class DummyClassName extends Action {
 
@@ -16,7 +17,14 @@ class DummyClassName extends Action {
 
     /*
     public function respond($result) {
-        //
+
+        $team = $this->data['team_id'];
+        $user = $this->data['event']['user'];
+        $channel = $this->data['event']['channel'];
+
+        $text = "Done! <@$user>";
+        $message = new SlackMessage($team, $channel, $text);
+        return $message->send();
     }
     */
 }
