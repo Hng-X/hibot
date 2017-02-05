@@ -6,7 +6,8 @@ namespace App\Slack;
 use App\Models\Credential;
 use Illuminate\Support\Facades\Log;
 
-class MessageParser {
+class MessageParser
+{
 
     protected $request;
     protected $wasDm;
@@ -18,15 +19,16 @@ class MessageParser {
     }
 
 
-    public static function request(array $request) {
+    public static function request(array $request)
+    {
         $mustMention = !(preg_match('/^D/', $request['event']['channel']));
         return new MessageParser($request, !$mustMention);
     }
 
     public function parse()
     {
-        $text=$this->request["event"]["text"];
-        $parsed=array(
+        $text = $this->request["event"]["text"];
+        $parsed = array(
             "type" => "unknown"
         );
 
@@ -34,25 +36,25 @@ class MessageParser {
             ->first()
             ->bot_user_id;
         if (preg_match("/<@$botUserId>/i", $text)
-            || $this->wasDm) {
+            || $this->wasDm
+        ) {
 
             $matches = [];
-            if(preg_match("/conjure/i", $text)) {
-                if($email = $this->findEmail($text)) {
-                $parsed = array(
-                    'type' => 'conjure-add',
-                    'email' => $email
-                );
+            if (preg_match("/conjure/i", $text)) {
+                if ($email = $this->findEmail($text)) {
+                    $parsed = array(
+                        'type' => 'conjure-add',
+                        'email' => $email
+                    );
                 }
-            } else if(preg_match("/pivotal/i", $text)) {
-                if($email=$this->findEmail($text)) {
+            } else if (preg_match("/pivotal/i", $text)) {
+                if ($email = $this->findEmail($text)) {
                     $parsed = array(
                         'type' => 'pivotal-add',
                         'email' => $email
                     );
                 }
-            }
-            else if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
+            } else if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
                 $parsed = array(
                     'type' => 'gitlab-add',
                     'username' => $matches[1]
@@ -71,7 +73,7 @@ class MessageParser {
     protected function findEmail($text)
     {
         $v = "/mailto:(.+@.+)\|/i";
-        $matches=[];
+        $matches = [];
         preg_match($v, $text, $matches);
         return isset($matches[1]) ? $matches[1] : false;
     }
