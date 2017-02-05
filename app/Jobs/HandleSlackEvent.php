@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace Hibot\Jobs;
 
-use App\Bot\Actions\Gitlab;
-use App\Custom\Conjure;
-use App\Custom\PivotalTracker;
-use App\Slack\MessageParser;
-use App\Slack\SlackMessage;
+use Hibot\Bot\Actions\Gitlab;
+use Hibot\Bot\Actions\PivotalTracker;
+use Hibot\Custom\Conjure;
+use Hibot\Slack\MessageParser;
+use Hibot\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -48,8 +48,7 @@ class HandleSlackEvent implements ShouldQueue
             if ($parsedText["type"] == "gitlab-add") {
                 bot_action(new Gitlab($parsedText, $this->request));
             } else if ($parsedText["type"] == "pivotal-add") {
-                $result = PivotalTracker::addToPivotal($parsedText["email"]);
-                PivotalTracker::sendPivotalAddResult($result, $this->request);
+                bot_action(new PivotalTracker($parsedText, $this->request));
             } else if ($parsedText["type"] == "conjure-add") {
                 $result = Conjure::addToConjure($parsedText["email"]);
                 Conjure::sendAddResult($result, $this->request);

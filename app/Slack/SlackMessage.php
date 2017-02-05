@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Slack;
+namespace Hibot\Slack;
 
-use App\Models\Credential;
 use GuzzleHttp\Client;
+use Hibot\Models\Credential;
 
 
 class SlackMessage
@@ -25,6 +25,14 @@ class SlackMessage
             $this->asUser = $asUser;
         else
             $this->asUser = config("bot.as_user");
+    }
+
+    public static function sendWelcomeMessage($user, $team)
+    {
+        $welcomeMessages = config("bot.welcome.messages");
+        $text = str_replace("@{user}", "<@$user>", $welcomeMessages[array_rand($welcomeMessages)]);
+        $message = new SlackMessage($team, $user, $text);
+        return $message->send();
     }
 
     public function send()
@@ -58,13 +66,5 @@ class SlackMessage
             "text" => $this->text,
             "as_user" => $this->asUser
         );
-    }
-
-    public static function sendWelcomeMessage($user, $team)
-    {
-        $welcomeMessages = config("bot.welcome.messages");
-        $text = str_replace("@{user}", "<@$user>", $welcomeMessages[array_rand($welcomeMessages)]);
-        $message = new SlackMessage($team, $user, $text);
-        return $message->send();
     }
 }

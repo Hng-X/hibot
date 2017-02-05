@@ -172,11 +172,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class
+        Hibot\Providers\AppServiceProvider::class,
+        Hibot\Providers\AuthServiceProvider::class,
+        // Hibot\Providers\BroadcastServiceProvider::class,
+        Hibot\Providers\EventServiceProvider::class,
+        Hibot\Providers\RouteServiceProvider::class
     ],
 
     /*

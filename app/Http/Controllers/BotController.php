@@ -1,8 +1,8 @@
 <?php
-namespace App\Http\Controllers;
+namespace Hibot\Http\Controllers;
 
-use App\Http\Middleware\EventsMiddleware;
-use App\Jobs\HandleSlackEvent;
+use Hibot\Http\Middleware\EventsMiddleware;
+use Hibot\Jobs\HandleSlackEvent;
 use Illuminate\Http\Request;
 
 class BotController extends Controller

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Hibot\Http\Controllers;
 
 
-use App\Models\Credential;
 use GuzzleHttp\Client;
+use Hibot\Models\Credential;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Bot\Actions;
+namespace Hibot\Bot\Actions;
 
-use App\Slack\SlackMessage;
 use Gitlab\Api\Projects;
 use Gitlab\Api\Users;
+use Hibot\Slack\SlackMessage;
 use Illuminate\Support\Facades\Log;
 
 class Gitlab extends Action

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Bot\Actions;
+namespace Hibot\Bot\Actions;
 
 
 abstract class Action

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Hibot\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\User;
+use Hibot\Http\Controllers\Controller;
+use Hibot\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Slack;
+namespace Hibot\Slack;
 
 
-use App\Models\Credential;
+use Hibot\Models\Credential;
 use Illuminate\Support\Facades\Log;
 
 class MessageParser

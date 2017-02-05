@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Hibot\Http\Middleware;
 
 use Closure;
 

@@ -6,10 +6,10 @@
  * Time: 12:35
  */
 
-namespace App\Custom;
+namespace Hibot\Custom;
 
 
-use App\Slack\SlackMessage;
+use Hibot\Slack\SlackMessage;
 use Illuminate\Support\Facades\Log;
 
 class Conjure {

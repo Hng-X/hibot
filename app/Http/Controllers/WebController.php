@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Hibot\Http\Controllers;
 
-use App\Models\Link;
+use Hibot\Models\Link;
 
 /**
  * Handles requests through the browser ie at the live site
