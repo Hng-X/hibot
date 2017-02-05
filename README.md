@@ -1,4 +1,4 @@
-<p align="center"><h1>hibot<h1></p>
+<p align="center"><h1>hibot</h1></p>
 
 <p align="center"><img  alt="hibot avatar" src ="https://raw.githubusercontent.com/Hng-X/hibot/dev/public/assets/logo.png"></p>
 
