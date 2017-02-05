@@ -2,15 +2,21 @@
 
 namespace App\Custom;
 
+use App\Actions\Action;
 use App\Slack\SlackMessage;
 use Gitlab\Api\Projects;
 use Gitlab\Api\Users;
 use Illuminate\Support\Facades\Log;
 
-class Gitlab
+class Gitlab extends Action
 {
 
-    public static function addToGitlab($username, $projectName = "getting-started")
+    public function run()
+    {
+        return $this->addToGitlab($this->data["username"], $this->data["project"]);
+    }
+
+    protected function addToGitlab($username, $projectName = "getting-started")
     {
         //authenticate
         $client = new \Gitlab\Client('http://gitlab.com/api/v3/'); // change here $client->authenticate('your_gitlab_token_here', \Gitlab\Client::AUTH_URL_TOKEN); // change here
@@ -78,7 +84,12 @@ class Gitlab
         return $resp;
     }
 
-    public static function sendGitlabAddResult($result, $project, array $data)
+    public function respond($result)
+    {
+        $this->sendGitlabAddResult($result, $this->data["project"], $this->request);
+    }
+
+    protected function sendGitlabAddResult($result, $project, array $data)
     {
         $team = $data['team_id'];
         $user = $data['event']['user'];

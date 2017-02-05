@@ -46,9 +46,7 @@ class HandleSlackEvent implements ShouldQueue
             $parsedText = MessageParser::request($this->request)->parse();
 
             if ($parsedText["type"] == "gitlab-add") {
-                $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
-                Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
-
+                bot_action(new Gitlab($parsedText, $this->request));
             } else if ($parsedText["type"] == "pivotal-add") {
                 $result = PivotalTracker::addToPivotal($parsedText["email"]);
                 PivotalTracker::sendPivotalAddResult($result, $this->request);
