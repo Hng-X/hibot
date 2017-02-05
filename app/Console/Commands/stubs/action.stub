@@ -5,7 +5,7 @@ namespace DummyNamespace;
 use App\Actions\Action;
 use App\Slack\SlackMessage;
 
-class DummyClassName extends Action {
+class DummyClass extends Action {
 
     public function __construct($data, array $request) {
         parent::__construct($data, $request);
@@ -15,6 +15,7 @@ class DummyClassName extends Action {
         //
     }
 
+    //Uncomment this method i you want to return a response
     /*
     public function respond($result) {
 

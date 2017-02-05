@@ -20,24 +20,33 @@ class CreateAction extends GeneratorCommand
      */
     protected $description = 'Creates a new bot action';
 
+
     /**
-     * Create a new command instance.
+     * The type of class being generated.
      *
-     * @return void
+     * @var string
      */
-    public function __construct()
+    protected $type = 'Bot action';
+
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
     {
-        parent::__construct();
+        return __DIR__ . '/stubs/action.stub';
     }
 
     /**
-     * Execute the console command.
+     * Get the default namespace for the class.
      *
-     * @return mixed
+     * @param  string $rootNamespace
+     * @return string
      */
-    public function handle()
+    protected function getDefaultNamespace($rootNamespace)
     {
-        $fileName = $this->argument("name");
-        //generate file
+        return $rootNamespace . '\Custom';
     }
 }
