@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
-class CreateAction
+use Illuminate\Console\GeneratorCommand;
+
+class CreateAction extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -17,6 +19,7 @@ class CreateAction
      * @var string
      */
     protected $description = 'Creates a new bot action';
+
     /**
      * Create a new command instance.
      *

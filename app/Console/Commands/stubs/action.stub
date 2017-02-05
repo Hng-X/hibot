@@ -7,8 +7,8 @@ use App\Slack\SlackMessage;
 
 class DummyClassName extends Action {
 
-    public function __construct($data) {
-        $this->data = $data;
+    public function __construct($data, array $request) {
+        parent::__construct($data, $request);
     }
 
     public function run() {
