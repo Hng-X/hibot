@@ -29,7 +29,7 @@ class MessageParser
     {
         $text = $this->request["event"]["text"];
         $parsed = array(
-            "type" => "unknown"
+            "type" => "not-directed"
         );
 
         $botUserId = Credential::where('team_id', $this->request['team_id'])
@@ -63,6 +63,10 @@ class MessageParser
                     $parsed["project"] = strtolower($matches[1]);
                 } else $parsed["project"] = "getting-started";
                 return $parsed;
+            } else {
+                $parsed = array(
+                    "type" => "unknown"
+                );
             }
         }
         Log::info("Parsed: " . print_r($parsed, true));
