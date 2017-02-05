@@ -6,6 +6,7 @@ use App\Custom\Conjure;
 use App\Custom\Gitlab;
 use App\Custom\PivotalTracker;
 use App\Models\Credential;
+use App\Slack\MessageParser;
 use App\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,12 +44,9 @@ class HandleSlackEvent implements ShouldQueue
         if ($this->request['event']['type']== "team_join" &&  config("bot.welcome.on")) {
             $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
-            $rawText = $this->request['event']['text'];
-            $mustMention = !(preg_match('/^D/', $this->request['event']['channel']));
+            $parsedText = MessageParser::request($this->request)->parse();
 
-            $parsedText = $this->parseText($rawText, $mustMention);
-            if (isset($parsedText["type"])) {
-                if ($parsedText["type"] == "gitlab-add") {
+           if ($parsedText["type"] == "gitlab-add") {
                     $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
                     Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
 
@@ -60,7 +58,6 @@ class HandleSlackEvent implements ShouldQueue
                     Conjure::sendAddResult($result, $this->request);
 
                 }
-            }
         }
     }
 
