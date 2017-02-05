@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Bot\Actions\Gitlab;
 use App\Custom\Conjure;
-use App\Custom\Gitlab;
 use App\Custom\PivotalTracker;
 use App\Slack\MessageParser;
 use App\Slack\SlackMessage;

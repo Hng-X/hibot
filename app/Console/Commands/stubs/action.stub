@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use App\Actions\Action;
+use App\Bot\Actions\Action;
 use App\Slack\SlackMessage;
 
 class DummyClass extends Action {

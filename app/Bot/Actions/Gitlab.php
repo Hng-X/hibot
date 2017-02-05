@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Custom;
+namespace App\Bot\Actions;
 
-use App\Actions\Action;
 use App\Slack\SlackMessage;
 use Gitlab\Api\Projects;
 use Gitlab\Api\Users;
