@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\GeneratorCommand;
-
-class CreateAction extends GeneratorCommand
+class CreateAction
 {
     /**
      * The name and signature of the console command.
@@ -19,13 +17,6 @@ class CreateAction extends GeneratorCommand
      * @var string
      */
     protected $description = 'Creates a new bot action';
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
-    protected $type = 'Bot action';
-
     /**
      * Create a new command instance.
      *
@@ -46,40 +37,4 @@ class CreateAction extends GeneratorCommand
         $fileName = $this->argument("name");
         //generate file
     }
-
-    /**
-     * Replace the class name for the given stub.
-     *
-     * @param  string $stub
-     * @param  string $name
-     * @return string
-     */
-    protected function replaceClass($stub, $name)
-    {
-        $stub = parent::replaceClass($stub, $name);
-
-        return str_replace('dummy:command', $this->option('command'), $stub);
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs/console.stub';
-    }
-
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string $rootNamespace
-     * @return string
-     */
-    protected function getDefaultNamespace($rootNamespace)
-    {
-        return $rootNamespace . '\Console\Commands';
-    }
-
 }

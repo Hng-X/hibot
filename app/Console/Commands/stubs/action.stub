@@ -1,0 +1,22 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Actions\Action
+
+class DummyClassName extends Action {
+
+    public function __construct($data) {
+        $this->data = $data;
+    }
+
+    public function run() {
+        //
+    }
+
+    /*
+    public function respond($result) {
+        //
+    }
+    */
+}
