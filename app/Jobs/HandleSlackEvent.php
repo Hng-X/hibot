@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Custom\Conjure;
 use App\Custom\Gitlab;
 use App\Custom\PivotalTracker;
-use App\Models\Credential;
 use App\Slack\MessageParser;
 use App\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
@@ -41,85 +40,23 @@ class HandleSlackEvent implements ShouldQueue
         $userId = isset($this->request['event']['user']) ? $this->request['event']['user'] : $this->request['event']['user']['id'];
         Log::info("Job::: " . print_r($this->request, true));
 
-        if ($this->request['event']['type']== "team_join" &&  config("bot.welcome.on")) {
+        if ($this->request['event']['type'] == "team_join" && config("bot.welcome.on")) {
             $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
         } else {
             $parsedText = MessageParser::request($this->request)->parse();
 
-           if ($parsedText["type"] == "gitlab-add") {
-                    $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
-                    Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
+            if ($parsedText["type"] == "gitlab-add") {
+                $result = Gitlab::addToGitlab($parsedText["username"], $parsedText["project"]);
+                Gitlab::sendGitlabAddResult($result, $parsedText["project"], $this->request);
 
-                } else if ($parsedText["type"] == "pivotal-add") {
-                    $result = PivotalTracker::addToPivotal($parsedText["email"]);
-                    PivotalTracker::sendPivotalAddResult($result,  $this->request);
-                } else if ($parsedText["type"] == "conjure-add") {
-                    $result = Conjure::addToConjure($parsedText["email"]);
-                    Conjure::sendAddResult($result, $this->request);
+            } else if ($parsedText["type"] == "pivotal-add") {
+                $result = PivotalTracker::addToPivotal($parsedText["email"]);
+                PivotalTracker::sendPivotalAddResult($result, $this->request);
+            } else if ($parsedText["type"] == "conjure-add") {
+                $result = Conjure::addToConjure($parsedText["email"]);
+                Conjure::sendAddResult($result, $this->request);
 
-                }
-        }
-    }
-
-    public function parseText($text, $mustMention=true)
-    {
-        $botUserId = Credential::where('team_id', $this->request['team_id'])->get()->first()->bot_user_id;
-        if (($mustMention && preg_match("/<@$botUserId>/i", $text))
-        || !$mustMention) {
-            $matches = [];
-            if(preg_match("/conjure/i", $text)) {
-                if($email=$this->findEmail($text)) {
-
-                    $parsed = array(
-                        'type' => 'conjure-add',
-                        'email' => $email
-                    );
-                }
-
-                return $parsed;
-            } else if(preg_match("/pivotal/i", $text)) {
-                if($email=$this->findEmail($text)) {
-
-                    $parsed = array(
-                        'type' => 'pivotal-add',
-                        'email' => $email
-                    );
-                }
-
-                return $parsed;
-            }
-            else if (preg_match("/username\s*:\s*([^@\s]+)/i", $text, $matches)) {
-                $parsed = array(
-                    'type' => 'gitlab-add',
-                    'username' => $matches[1]
-                );
-                if (preg_match("/project\s*:\s*([^@\s]+)/i", $text, $matches)) {
-                    $parsed["project"] = strtolower($matches[1]);
-                } else $parsed["project"] = "getting-started";
-                Log::info("Parsed: " . print_r($parsed, true));
-                return $parsed;
             }
         }
-        if (preg_match("/\b404\b/i", $text)
-            || (stripos($text, "gitlab") !== false
-                && stripos($text, "error") !== false
-                && stripos($text, "access"))
-        ) {
-            $parsed = array(
-                'type' => 'gitlab-problem-access'
-            );
-            return $parsed;
-        }
-        return [];
     }
-
-public function findEmail($text) 
-{ 
-$v = "/mailto:(.+@.+)\|/i"; 
-$matches=[];
-preg_match($v, $text, $matches); 
-return $matches[1];
-}
-
-
 }
