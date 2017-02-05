@@ -1,4 +1,6 @@
-# Hibot
+<p align="center"><h1>@hibot<h1>
+
+<p align="center"><img  alt="hibot avatar" src ="https://raw.githubusercontent.com/Hng-X/hibot/dev/public/assets/logo.png"></p>
 
 <p align="center"><a href="http://makeapullrequest.com"><img  alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square"></a>
 <img src="https://heroku-badge.herokuapp.com/?app=hibotapp" /></p>
