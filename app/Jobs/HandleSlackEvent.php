@@ -2,11 +2,7 @@
 
 namespace Hibot\Jobs;
 
-use Hibot\Bot\Actions\Gitlab;
-use Hibot\Bot\Actions\PivotalTracker;
 use Hibot\Bot\Slack\MessageParser;
-use Hibot\Bot\Slack\SlackMessage;
-use Hibot\Custom\Conjure;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,23 +33,18 @@ class HandleSlackEvent implements ShouldQueue
      */
     public function handle()
     {
-        $userId = isset($this->request['event']['user']) ? $this->request['event']['user'] : $this->request['event']['user']['id'];
         Log::info("Job::: " . print_r($this->request, true));
 
-        if ($this->request['event']['type'] == "team_join" && config("bot.welcome.on")) {
-            $message = SlackMessage::sendWelcomeMessage($userId, $this->request['team_id']);
+        //parse
+        $parsedText = MessageParser::request($this->request)->parse();
+
+        //if the type is listed in config, dispatch the appropriate action
+        $classname = bot_config("bot.actions." . $parsedText["type"], "");
+        if ($classname) {
+            bot_action(new $classname($parsedText, $this->request));
         } else {
-            $parsedText = MessageParser::request($this->request)->parse();
-
-            if ($parsedText["type"] == "gitlab-add") {
-                bot_action(new Gitlab($parsedText, $this->request));
-            } else if ($parsedText["type"] == "pivotal-add") {
-                bot_action(new PivotalTracker($parsedText, $this->request));
-            } else if ($parsedText["type"] == "conjure-add") {
-                $result = Conjure::addToConjure($parsedText["email"]);
-                Conjure::sendAddResult($result, $this->request);
-
-            }
+            //or else, do something
         }
     }
 }
+

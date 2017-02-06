@@ -27,14 +27,6 @@ class SlackMessage
             $this->asUser = config("bot.as_user");
     }
 
-    public static function sendWelcomeMessage($user, $team)
-    {
-        $welcomeMessages = config("bot.welcome.messages");
-        $text = str_replace("@{user}", "<@$user>", $welcomeMessages[array_rand($welcomeMessages)]);
-        $message = new SlackMessage($team, $user, $text);
-        return $message->send();
-    }
-
     public function send()
     {
         $client = new Client();

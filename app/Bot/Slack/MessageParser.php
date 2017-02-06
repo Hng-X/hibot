@@ -27,6 +27,15 @@ class MessageParser
 
     public function parse()
     {
+        $userId = isset($this->request['event']['user'])
+            ? $this->request['event']['user']
+            : $this->request['event']['user']['id'];
+
+        if ($this->request['event']['type'] == "team_join") {
+            return array(
+                "type" => "team-join"
+            );
+        }
         $text = $this->request["event"]["text"];
         $parsed = array(
             "type" => "not-directed"
