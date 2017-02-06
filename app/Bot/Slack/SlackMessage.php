@@ -1,6 +1,6 @@
 <?php
 
-namespace Hibot\Slack;
+namespace Hibot\Bot\Slack;
 
 use GuzzleHttp\Client;
 use Hibot\Models\Credential;

@@ -9,7 +9,7 @@
 namespace Hibot\Custom;
 
 
-use Hibot\Slack\SlackMessage;
+use Hibot\Bot\Slack\SlackMessage;
 use Illuminate\Support\Facades\Log;
 
 class Conjure {

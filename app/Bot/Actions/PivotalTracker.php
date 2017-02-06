@@ -2,7 +2,7 @@
 
 namespace Hibot\Bot\Actions;
 
-use Hibot\Slack\SlackMessage;
+use Hibot\Bot\Slack\SlackMessage;
 use Illuminate\Support\Facades\Log;
 
 class PivotalTracker extends Action

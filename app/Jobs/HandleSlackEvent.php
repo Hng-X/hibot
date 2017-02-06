@@ -4,9 +4,9 @@ namespace Hibot\Jobs;
 
 use Hibot\Bot\Actions\Gitlab;
 use Hibot\Bot\Actions\PivotalTracker;
+use Hibot\Bot\Slack\MessageParser;
+use Hibot\Bot\Slack\SlackMessage;
 use Hibot\Custom\Conjure;
-use Hibot\Slack\MessageParser;
-use Hibot\Slack\SlackMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;

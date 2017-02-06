@@ -4,7 +4,7 @@ namespace Hibot\Bot\Actions;
 
 use Gitlab\Api\Projects;
 use Gitlab\Api\Users;
-use Hibot\Slack\SlackMessage;
+use Hibot\Bot\Slack\SlackMessage;
 use Illuminate\Support\Facades\Log;
 
 class Gitlab extends Action
